@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+<!--    <img src="https://upload-images.jianshu.io/upload_images/20351380-be9a26aa5e45df47.jpg">-->
     <router-view/>
   </div>
 </template>
