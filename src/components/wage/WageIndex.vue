@@ -57,7 +57,7 @@
           <i class="el-icon-setting" style="margin-right: 15px"></i>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>查看</el-dropdown-item>
-            <el-dropdown-item class="add-wage" @click="addWageOrder(WageOrder)">新增</el-dropdown-item>
+            <el-dropdown-item @click.native="addWageOrder()">新增</el-dropdown-item>
             <el-dropdown-item>删除</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -77,8 +77,10 @@ export default {
   name: 'WageIndex',
   components: {WageOrder, EditForm},
   methods: {
-    addWageOrder (WageOrder) {
-      this.$refs.edit.dialogFormVisible = true
+    addWageOrder () {
+      EditForm.dialogFormVisible = true
+      // this.$refs.edit.dialogFormVisible = true
+      console.info('点击成功！')
       this.$refs.edit.form = {
         eid: WageOrder.eid,
         code: WageOrder.code,
@@ -136,8 +138,5 @@ export default {
     width: 990px;
     margin-left: auto;
     margin-right: auto;
-  }
-  .add-wage {
-    cursor: pointer;
   }
 </style>
