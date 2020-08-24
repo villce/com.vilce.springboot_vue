@@ -40,15 +40,18 @@
     <el-table-column fixed="right" label="操作" width="100" align='center'>
       <template slot-scope="scope">
         <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-        <el-button type="text" size="small">编辑</el-button>
+        <el-button @click="editWage()" type="text" size="small">编辑</el-button>
       </template>
     </el-table-column>
+    <edit-form @onSubmit="getAllWageOrder()" ref="edit"></edit-form>
   </el-table>
 </template>
 
 <script>
+import EditForm from './EditForm'
 export default {
   name: 'WageOrder',
+  components: EditForm,
   data () {
     return {
       tableData: []
@@ -68,6 +71,50 @@ export default {
           }
         }
       })
+    },
+    handleClick (row) {
+      console.info(row)
+      this.$refs.edit.dialogFormVisible = true
+      this.$refs.edit.form = {
+        eid: row.eid,
+        code: row.code,
+        name: row.name,
+        order_time: row.order_time,
+        basic_wage: row.basic_wage,
+        job_wage: row.job_wage,
+        benchmark_performance: row.benchmark_performance,
+        standard_salary: row.standard_salary,
+        fixed_allowance: row.fixed_allowance,
+        technical_expert_allowance: row.technical_expert_allowance,
+        rank_allowance: row.rank_allowance,
+        fixed_bonus: row.fixed_bonus,
+        floating_bonus: row.floating_bonus,
+        total_wages: row.total_wages,
+        examination_allowance: row.examination_allowance,
+        on_off_after_leave_pay: row.on_off_after_leave_pay,
+        performance_adjustment: row.performance_adjustment,
+        floating_allowance: row.floating_allowance,
+        daily_overtime: row.daily_overtime,
+        sick_leave_deduction: row.sick_leave_deduction,
+        late_absentee_deductions: row.late_absentee_deductions,
+        other_increase_or_decrease: row.other_increase_or_decrease,
+        maternity_leave_deductions: row.maternity_leave_deductions,
+        floating_bonus2: row.floating_bonus2,
+        recommendation_award: row.recommendation_award,
+        product_experience_bonus: row.product_experience_bonus,
+        payable: row.payable,
+        social_security: row.social_security,
+        provident_fund: row.provident_fund,
+        post_insurance_pay: row.post_insurance_pay,
+        education_for_children: row.education_for_children,
+        home_loan: row.home_loan,
+        housing_rent: row.housing_rent,
+        support_for_the_elderly: row.support_for_the_elderly,
+        continuing_education: row.continuing_education,
+        deferred_insurance: row.deferred_insurance,
+        tax: row.tax,
+        paid_wages: row.paid_wages
+      }
     }
   }
 }

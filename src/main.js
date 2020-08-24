@@ -4,12 +4,13 @@ import router from './router'
 import store from './store'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import qs from 'qs'
 
 var axios = require('axios')
-axios.defaults.baseURL = 'http://120.55.169.142:8006'
+axios.defaults.baseURL = 'http://localhost:8006'
 Vue.prototype.$axios = axios
 Vue.config.productionTip = false
-
+Vue.prototype.$qs = qs
 Vue.use(ElementUI)
 
 router.beforeEach((to, from, next) => {

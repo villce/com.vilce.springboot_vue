@@ -1,6 +1,6 @@
 <template>
   <el-menu
-    :default-active="'/index'"
+    :default-active="this.$route.path"
     router
     mode="horizontal"
     background-color="white"
@@ -25,7 +25,7 @@ export default {
         {name: '/index', navItem: '首页'},
         {name: '/wageIndex', navItem: '工资单'},
         {name: '/jotter', navItem: '笔记本'},
-        // {name: '/library', navItem: '图书馆'},
+        {name: '/library', navItem: '图书馆'},
         {name: '/admin', navItem: '个人中心'}
       ]
     }

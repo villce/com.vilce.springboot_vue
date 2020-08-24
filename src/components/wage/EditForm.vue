@@ -223,7 +223,7 @@ export default {
     },
     onSubmit () {
       this.$axios
-        .post('/books', {
+        .post('/wageOrder', {
           eid: this.form.eid,
           code: this.form.code,
           name: this.form.name,

@@ -59,8 +59,8 @@ export default {
     loadBooks () {
       var _this = this
       this.$axios.get('/book/getAllBooks').then(resp => {
-        if (resp && resp.status === 0) {
-          _this.books = resp.data
+        if (resp && resp.data.status === 0) {
+          _this.books = resp.data.data
           console.info(_this.books)
         }
       })
@@ -72,11 +72,11 @@ export default {
     searchResult () {
       var _this = this
       this.$axios
-        .post('/search', {
-          keywords: this.$refs.searchBar.keywords
-        }).then(resp => {
-          if (resp && resp.status === 0) {
-            _this.books = resp.data
+        .get('/book/getBookByNameOrAuthor?str=' +
+          this.$refs.searchBar.keywords
+        ).then(resp => {
+          if (resp && resp.data.status === 0) {
+            _this.books = resp.data.data
           }
         })
     },
@@ -87,8 +87,8 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$axios
-          .post('/delete', {eid: eid}).then(resp => {
-            if (resp && resp.status === 0) {
+          .post('/book/deleteBookById', this.$qs.stringify({eid: eid})).then(resp => {
+            if (resp && resp.data.status === 0) {
               this.loadBooks()
             }
           })
@@ -101,6 +101,7 @@ export default {
       // alert(id)
     },
     editBook (item) {
+      console.info(item)
       this.$refs.edit.dialogFormVisible = true
       this.$refs.edit.form = {
         eid: item.eid,

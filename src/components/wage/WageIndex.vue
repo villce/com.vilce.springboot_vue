@@ -78,8 +78,7 @@ export default {
   components: {WageOrder, EditForm},
   methods: {
     addWageOrder () {
-      EditForm.dialogFormVisible = true
-      // this.$refs.edit.dialogFormVisible = true
+      this.$refs.dialogFormVisible = true
       console.info('点击成功！')
       this.$refs.edit.form = {
         eid: WageOrder.eid,

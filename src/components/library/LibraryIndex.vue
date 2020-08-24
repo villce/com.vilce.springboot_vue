@@ -20,10 +20,11 @@ export default {
     listByCategory () {
       var _this = this
       var cid = this.$refs.sideMenu.cid
-      var url = 'categories/' + cid + '/books'
+      var url = 'book/getBooksByCategory?cid=' + cid
       this.$axios.get(url).then(resp => {
-        if (resp && resp.status === 0) {
-          _this.$refs.booksArea.books = resp.data
+        if (resp && resp.data.status === 0) {
+          console.info(resp)
+          _this.$refs.booksArea.books = resp.data.data
         }
       })
     }

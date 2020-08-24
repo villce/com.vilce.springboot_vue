@@ -20,6 +20,7 @@
         </el-form-item>
         <el-form-item label="封面" :label-width="formLabelWidth" prop="cover">
           <el-input v-model="form.cover" autocomplete="off" placeholder="图片 URL"></el-input>
+          <img-upload @onUpload="uploadImg" ref="imgUpload"></img-upload>
         </el-form-item>
         <el-form-item label="简介" :label-width="formLabelWidth" prop="introduction">
           <el-input type="textarea" v-model="form.introduction" autocomplete="off"></el-input>
@@ -47,8 +48,10 @@
 </template>
 
 <script>
+import ImgUpload from './ImgUpload'
 export default {
   name: 'EditForm',
+  components: {ImgUpload},
   data () {
     return {
       dialogFormVisible: false,
@@ -78,22 +81,29 @@ export default {
         press: '',
         cover: '',
         introduction: '',
-        category: ''
+        category: {}
       }
     },
+    uploadImg () {
+      this.form.cover = this.$refs.imgUpload.url
+    },
     onSubmit () {
+      console.info(this.form)
       this.$axios
-        .post('/books', {
-          eid: this.form.eid,
-          cover: this.form.cover,
-          title: this.form.title,
-          author: this.form.author,
-          time: this.form.time,
-          press: this.form.press,
-          introduction: this.form.introduction,
-          category: this.form.category
-        }).then(resp => {
-          if (resp && resp.status === 0) {
+        .post('/book/addOrUpdateBook',
+          this.$qs.stringify({
+            eid: this.form.eid,
+            cover: this.form.cover,
+            title: this.form.title,
+            author: this.form.author,
+            time: this.form.time,
+            press: this.form.press,
+            introduction: this.form.introduction,
+            cid: this.form.category.eid
+          })
+        ).then(resp => {
+          console.info(resp)
+          if (resp && resp.data.status === 0) {
             this.dialogFormVisible = false
             this.$emit('onSubmit')
           }
