@@ -13,6 +13,7 @@
 <script>
 import SideMenu from './SideMenu'
 import Books from './Books'
+
 export default {
   name: 'AppLibrary',
   components: {Books, SideMenu},
@@ -20,11 +21,10 @@ export default {
     listByCategory () {
       var _this = this
       var cid = this.$refs.sideMenu.cid
-      var url = 'book/getBooksByCategory?cid=' + cid
-      this.$axios.get(url).then(resp => {
+      this.$axios.get('/library/listBooksByCategory?cid=' + cid).then(resp => {
         if (resp && resp.data.status === 0) {
-          console.info(resp)
           _this.$refs.booksArea.books = resp.data.data
+          _this.$refs.booksArea.currentPage = 1
         }
       })
     }

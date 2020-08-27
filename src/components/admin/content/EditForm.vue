@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <i class="el-icon-circle-plus-outline" @click="dialogFormVisible = true"></i>
+  <div style="text-align: left">
+    <el-button class="add-button" type="success" @click="dialogFormVisible = true">添加图书</el-button>
     <el-dialog
       title="添加/修改图书"
       :visible.sync="dialogFormVisible"
@@ -12,8 +12,8 @@
         <el-form-item label="作者" :label-width="formLabelWidth" prop="author">
           <el-input v-model="form.author" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="出版日期" :label-width="formLabelWidth" prop="time">
-          <el-input v-model="form.time" autocomplete="off"></el-input>
+        <el-form-item label="出版日期" :label-width="formLabelWidth" prop="date">
+          <el-input v-model="form.date" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="出版社" :label-width="formLabelWidth" prop="press">
           <el-input v-model="form.press" autocomplete="off"></el-input>
@@ -22,21 +22,21 @@
           <el-input v-model="form.cover" autocomplete="off" placeholder="图片 URL"></el-input>
           <img-upload @onUpload="uploadImg" ref="imgUpload"></img-upload>
         </el-form-item>
-        <el-form-item label="简介" :label-width="formLabelWidth" prop="introduction">
-          <el-input type="textarea" v-model="form.introduction" autocomplete="off"></el-input>
+        <el-form-item label="简介" :label-width="formLabelWidth" prop="abs">
+          <el-input type="textarea" v-model="form.abs" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="分类" :label-width="formLabelWidth" prop="cid">
-          <el-select v-model="form.category.eid" placeholder="请选择分类">
-            <el-option label="文学" value="1"></el-option>
-            <el-option label="流行" value="2"></el-option>
-            <el-option label="文化" value="3"></el-option>
-            <el-option label="生活" value="4"></el-option>
-            <el-option label="经管" value="5"></el-option>
-            <el-option label="科技" value="6"></el-option>
-          </el-select>
+        <el-select v-model="form.category.id" placeholder="请选择分类">
+          <el-option label="文学" value="1"></el-option>
+          <el-option label="流行" value="2"></el-option>
+          <el-option label="文化" value="3"></el-option>
+          <el-option label="生活" value="4"></el-option>
+          <el-option label="经管" value="5"></el-option>
+          <el-option label="科技" value="6"></el-option>
+        </el-select>
         </el-form-item>
-        <el-form-item prop="eid" style="height: 0">
-          <el-input type="hidden" v-model="form.eid" autocomplete="off"></el-input>
+        <el-form-item prop="id" style="height: 0">
+          <el-input type="hidden" v-model="form.id" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -56,15 +56,16 @@ export default {
     return {
       dialogFormVisible: false,
       form: {
-        eid: '',
+        id: '',
         title: '',
         author: '',
-        time: '',
+        date: '',
         press: '',
         cover: '',
-        introduction: '',
+        abs: '',
+        cid: '',
         category: {
-          eid: '',
+          id: '',
           name: ''
         }
       },
@@ -73,51 +74,52 @@ export default {
   },
   methods: {
     clear () {
+      this.$refs.imgUpload.clear()
       this.form = {
         id: '',
         title: '',
         author: '',
-        time: '',
+        date: '',
         press: '',
         cover: '',
-        introduction: '',
-        category: {}
+        abs: '',
+        category: {
+          id: '',
+          name: ''
+        }
       }
+    },
+    onSubmit () {
+      this.$axios
+        .post('/library/addOrUpdateBooks', {
+          id: this.form.id,
+          cover: this.form.cover,
+          title: this.form.title,
+          author: this.form.author,
+          date: this.form.date,
+          press: this.form.press,
+          abs: this.form.abs,
+            category: this.form.category
+        }).then(resp => {
+        if (resp && resp.data.status === 0) {
+          this.dialogFormVisible = false
+          this.$message({
+            type: 'info',
+            message: resp.data.message
+          })
+          this.$emit('onSubmit')
+        }
+      })
     },
     uploadImg () {
       this.form.cover = this.$refs.imgUpload.url
-    },
-    onSubmit () {
-      console.info(this.form)
-      this.$axios
-        .post('/book/addOrUpdateBook',
-          this.$qs.stringify({
-            eid: this.form.eid,
-            cover: this.form.cover,
-            title: this.form.title,
-            author: this.form.author,
-            time: this.form.time,
-            press: this.form.press,
-            introduction: this.form.introduction,
-            cid: this.form.category.eid
-          })
-        ).then(resp => {
-          console.info(resp)
-          if (resp && resp.data.status === 0) {
-            this.dialogFormVisible = false
-            this.$emit('onSubmit')
-          }
-        })
-    }
+      }
   }
 }
 </script>
 
 <style scoped>
-  .el-icon-circle-plus-outline {
-    margin: 50px 0 0 20px;
-    font-size: 100px;
-    float: left;
-    cursor: pointer;
+  .add-button {
+    margin: 18px 0 0 10px;
   }
 </style>
