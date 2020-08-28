@@ -42,7 +42,8 @@ export default {
       return this.$confirm(`确定移除 ${file.name}？`)
     },
     handleSuccess (response) {
-      this.url = response
+      console.info(response)
+      this.url = response.data
       // console.log(this.url)
       this.$emit('onUpload')
       this.$message.warning('上传成功')

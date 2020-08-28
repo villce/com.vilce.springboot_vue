@@ -81,7 +81,7 @@ export default {
               article_content_html: render,
               article_abstract: this.article.article_abstract,
               article_cover: this.article.article_cover,
-              article_date: this.article.article_date
+              article_date: new Date()
             }).then(resp => {
             if (resp && resp.data.status === 0) {
               this.$message({

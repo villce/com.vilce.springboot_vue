@@ -87,8 +87,10 @@
 </template>
 
 <script>
+import EditForm from './EditForm'
 export default {
   name: 'BookManagement',
+  components: {EditForm},
   data () {
     return {
       books: []
@@ -144,10 +146,10 @@ export default {
       }
     },
     loadBooks () {
-      var _this = this
       this.$axios.get('/library/listBooks').then(resp => {
         if (resp && resp.data.status === 0) {
-          _this.books = resp.data.data
+          this.books = resp.data.data
+          console.info(this.books)
         }
       })
     }

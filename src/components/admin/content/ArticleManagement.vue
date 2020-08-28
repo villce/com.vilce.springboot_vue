@@ -30,12 +30,12 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="articleTitle"
+          prop="article_title"
           label="题目（展开查看摘要）"
           fit>
         </el-table-column>
         <el-table-column
-          prop="articleDate"
+          prop="article_date"
           label="发布日期"
           width="200">
         </el-table-column>
@@ -151,6 +151,7 @@ export default {
                 message: resp.data.message
               })
               this.loadArticles()
+              _this.$router.replace('/admin/dashboard')
             }
           })
         }

@@ -99,7 +99,7 @@ export default {
           date: this.form.date,
           press: this.form.press,
           abs: this.form.abs,
-            category: this.form.category
+          cid: this.form.category.id
         }).then(resp => {
         if (resp && resp.data.status === 0) {
           this.dialogFormVisible = false
