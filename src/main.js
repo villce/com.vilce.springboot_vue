@@ -17,6 +17,7 @@ import {
   Checkbox,
   CheckboxButton,
   CheckboxGroup,
+  DropdownItem,
   Switch,
   Select,
   Option,
@@ -60,7 +61,7 @@ import {
   Loading,
   MessageBox,
   Message,
-  Notification
+  Notification, Dropdown, DropdownMenu
 } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
@@ -114,6 +115,9 @@ Vue.use(TimelineItem)
 Vue.use(Link)
 Vue.use(Divider)
 Vue.use(Image)
+Vue.use(Dropdown)
+Vue.use(DropdownItem)
+Vue.use(DropdownMenu)
 
 Vue.use(Loading.directive)
 
@@ -126,7 +130,7 @@ Vue.prototype.$notify = Notification
 Vue.prototype.$message = Message
 
 var axios = require('axios')
-axios.defaults.baseURL = 'http://localhost:8006/'
+axios.defaults.baseURL = "http://localhost:8006/"
 // 使请求带上凭证信息
 axios.defaults.withCredentials = true
 

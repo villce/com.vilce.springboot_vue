@@ -1,13 +1,22 @@
 <template>
-  <div>
-    <i class="el-icon-circle-plus-outline" @click="dialogFormVisible = true"></i>
+  <div style="text-align: left">
+    <el-button class="add-button" type="success" @click="dialogFormVisible = true">添加工资条</el-button>
     <el-dialog
       title="添加/修改工资单"
       :visible.sync="dialogFormVisible"
       @close="clear">
       <el-form v-model="form" style="text-align: left" ref="dataForm">
-        <el-form-item label="日期" :label-width="formLabelWidth" prop="order_time">
-          <el-input v-model="form.order_time" autocomplete="off" placeholder="日期"></el-input>
+<!--        <el-form-item label="日期">-->
+<!--          <el-date-picker-->
+<!--            v-model="form.order_time"-->
+<!--            type="date"-->
+<!--            :picker-options="pickerBeginDateBefore"-->
+<!--            format="yyyy-MM-dd"-->
+<!--            placeholder="选择时间">-->
+<!--          </el-date-picker>-->
+<!--        </el-form-item>-->
+        <el-form-item label="日期" :label-width="formLabelWidth" prop="code">
+          <el-input v-model="form.order_time" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="工号" :label-width="formLabelWidth" prop="code">
           <el-input v-model="form.code" autocomplete="off"></el-input>
@@ -19,13 +28,13 @@
           <el-input v-model="form.basic_wage" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="岗位工资" :label-width="formLabelWidth" prop="job_wage">
-          <el-input v-model="form.job_wage" autocomplete="off" placeholder="图片 URL"></el-input>
+          <el-input v-model="form.job_wage" autocomplete="off" ></el-input>
         </el-form-item>
         <el-form-item label="基准绩效" :label-width="formLabelWidth" prop="benchmark_performance">
-          <el-input type="textarea" v-model="form.benchmark_performance" autocomplete="off"></el-input>
+          <el-input v-model="form.benchmark_performance" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="标准工资" :label-width="formLabelWidth" prop="standard_salary">
-          <el-input v-model="form.standard_salary" autocomplete="off" placeholder="不加《》"></el-input>
+          <el-input v-model="form.standard_salary" autocomplete="off" ></el-input>
         </el-form-item>
         <el-form-item label="固定津贴" :label-width="formLabelWidth" prop="fixed_allowance">
           <el-input v-model="form.fixed_allowance" autocomplete="off"></el-input>
@@ -37,13 +46,13 @@
           <el-input v-model="form.rank_allowance" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="固定奖金" :label-width="formLabelWidth" prop="fixed_bonus">
-          <el-input v-model="form.fixed_bonus" autocomplete="off" placeholder="图片 URL"></el-input>
+          <el-input v-model="form.fixed_bonus" autocomplete="off" ></el-input>
         </el-form-item>
         <el-form-item label="浮动奖金" :label-width="formLabelWidth" prop="floating_bonus">
-          <el-input type="textarea" v-model="form.floating_bonus" autocomplete="off"></el-input>
+          <el-input v-model="form.floating_bonus" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="工资共计" :label-width="formLabelWidth" prop="total_wages">
-          <el-input v-model="form.total_wages" autocomplete="off" placeholder="不加《》"></el-input>
+          <el-input v-model="form.total_wages" autocomplete="off" ></el-input>
         </el-form-item>
         <el-form-item label="考试津贴" :label-width="formLabelWidth" prop="examination_allowance">
           <el-input v-model="form.examination_allowance" autocomplete="off"></el-input>
@@ -55,13 +64,13 @@
           <el-input v-model="form.performance_adjustment" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="浮动津贴" :label-width="formLabelWidth" prop="floating_allowance">
-          <el-input v-model="form.floating_allowance" autocomplete="off" placeholder="图片 URL"></el-input>
+          <el-input v-model="form.floating_allowance" autocomplete="off" ></el-input>
         </el-form-item>
         <el-form-item label="日常加班" :label-width="formLabelWidth" prop="daily_overtime">
-          <el-input type="textarea" v-model="form.daily_overtime" autocomplete="off"></el-input>
+          <el-input v-model="form.daily_overtime" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="病假扣除" :label-width="formLabelWidth" prop="sick_leave_deduction">
-          <el-input v-model="form.sick_leave_deduction" autocomplete="off" placeholder="不加《》"></el-input>
+          <el-input v-model="form.sick_leave_deduction" autocomplete="off" ></el-input>
         </el-form-item>
         <el-form-item label="迟到/旷工扣款" :label-width="formLabelWidth" prop="late_absentee_deductions">
           <el-input v-model="form.late_absentee_deductions" autocomplete="off"></el-input>
@@ -73,13 +82,13 @@
           <el-input v-model="form.maternity_leave_deductions" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="浮动奖金2" :label-width="formLabelWidth" prop="floating_bonus2">
-          <el-input v-model="form.floating_bonus2" autocomplete="off" placeholder="图片 URL"></el-input>
+          <el-input v-model="form.floating_bonus2" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="推荐奖" :label-width="formLabelWidth" prop="recommendation_award">
-          <el-input type="textarea" v-model="form.recommendation_award" autocomplete="off"></el-input>
+          <el-input v-model="form.recommendation_award" ></el-input>
         </el-form-item>
         <el-form-item label="产品体验/积分奖金" :label-width="formLabelWidth" prop="product_experience_bonus">
-          <el-input v-model="form.product_experience_bonus" autocomplete="off" placeholder="不加《》"></el-input>
+          <el-input v-model="form.product_experience_bonus" autocomplete="off" ></el-input>
         </el-form-item>
         <el-form-item label="应发工资" :label-width="formLabelWidth" prop="payable">
           <el-input v-model="form.payable" autocomplete="off"></el-input>
@@ -91,13 +100,13 @@
           <el-input v-model="form.provident_fund" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="险金后工资" :label-width="formLabelWidth" prop="post_insurance_pay">
-          <el-input v-model="form.post_insurance_pay" autocomplete="off" placeholder="图片 URL"></el-input>
+          <el-input v-model="form.post_insurance_pay" autocomplete="off" ></el-input>
         </el-form-item>
         <el-form-item label="子女教育" :label-width="formLabelWidth" prop="education_for_children">
-          <el-input type="textarea" v-model="form.education_for_children" autocomplete="off"></el-input>
+          <el-input v-model="form.education_for_children" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="住房贷款" :label-width="formLabelWidth" prop="home_loan">
-          <el-input v-model="form.home_loan" autocomplete="off" placeholder="不加《》"></el-input>
+          <el-input v-model="form.home_loan" autocomplete="off" ></el-input>
         </el-form-item>
         <el-form-item label="住房租金" :label-width="formLabelWidth" prop="housing_rent">
           <el-input v-model="form.housing_rent" autocomplete="off"></el-input>
@@ -109,13 +118,13 @@
           <el-input v-model="form.continuing_education" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="递延保险" :label-width="formLabelWidth" prop="deferred_insurance">
-          <el-input v-model="form.deferred_insurance" autocomplete="off" placeholder="图片 URL"></el-input>
+          <el-input v-model="form.deferred_insurance" autocomplete="off" ></el-input>
         </el-form-item>
         <el-form-item label="本月个税" :label-width="formLabelWidth" prop="tax">
-          <el-input type="textarea" v-model="form.tax" autocomplete="off"></el-input>
+          <el-input v-model="form.tax" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="实发工资" :label-width="formLabelWidth" prop="paid_wages">
-          <el-input v-model="form.paid_wages" autocomplete="off" placeholder="不加《》"></el-input>
+          <el-input v-model="form.paid_wages" autocomplete="off" ></el-input>
         </el-form-item>
         <el-form-item prop="eid" style="height: 0">
           <el-input type="hidden" v-model="form.eid" autocomplete="off"></el-input>
@@ -131,7 +140,7 @@
 
 <script>
 export default {
-  name: 'EditForm',
+  name: 'WageEdit',
   data () {
     return {
       dialogFormVisible: false,
@@ -174,6 +183,14 @@ export default {
         deferred_insurance: '',
         tax: '',
         paid_wages: ''
+      },
+      pickerBeginDateBefore:{
+        disabledDate: (time) => {
+          let beginDateVal = this.form.order_time;
+          if (beginDateVal) {
+            return time.getTime() > beginDateVal;
+          }
+        }
       },
       formLabelWidth: '120px'
     }
@@ -274,10 +291,7 @@ export default {
 </script>
 
 <style scoped>
-  .el-icon-circle-plus-outline {
-    margin: 50px 0 0 20px;
-    font-size: 100px;
-    float: left;
-    cursor: pointer;
+  .add-button {
+    margin: 18px 0 0 10px;
   }
 </style>
