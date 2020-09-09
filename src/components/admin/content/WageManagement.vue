@@ -14,6 +14,15 @@
         stripe
         style="width: 100%"
         :max-height="tableHeight">
+        <el-table-column type="expand">
+          <template slot-scope="props">
+            <el-image
+              style="margin:18px 0 0 30px;width:100px;height: 100px"
+              :src="props.row.url"
+              fit="url">
+            </el-image>
+          </template>
+        </el-table-column>
         <el-table-column
           type="selection"
           width="55">
@@ -65,7 +74,7 @@
               编辑
             </el-button>
             <el-button
-              @click.native.prevent="deleteBook(scope.row.id)"
+              @click.native.prevent="deleteWage(scope.row.id)"
               type="text"
               size="small">
               移除
@@ -94,6 +103,11 @@
     mounted: function () {
       this.loadWageOrders()
     },
+    computed: {
+      tableHeight () {
+        return window.innerHeight - 320
+      }
+    },
     methods: {
       loadWageOrders () {
         var _this = this
@@ -107,7 +121,6 @@
         })
       },
       editWage (row) {
-        console.info(row)
         this.$refs.edit.dialogFormVisible = true
         this.$refs.edit.form = {
           id: row.id,
@@ -148,8 +161,34 @@
           continuing_education: row.continuing_education,
           deferred_insurance: row.deferred_insurance,
           tax: row.tax,
-          paid_wages: row.paid_wages
+          paid_wages: row.paid_wages,
+          url: row.url
         }
+      },
+      deleteWage (id) {
+        console.info(id)
+        this.$confirm('此操作将永久删除该工资条, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+            this.$axios
+              .get('/wage/deleteWageOrder?id='+ id).then(resp => {
+              if (resp && resp.data.status === 0) {
+                this.$message({
+                  type: 'info',
+                  message: resp.data.message
+                })
+                this.loadWageOrders()
+              }
+            })
+          }
+        ).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
       }
     }
   }
