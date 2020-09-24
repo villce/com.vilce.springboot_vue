@@ -26,6 +26,11 @@ export default new Router({
           component: () => import('../components/home/AppIndex')
         },
         {
+          path: '/tool',
+          name: 'MarkTool',
+          component: () => import('../components/tool/MarkTool')
+        },
+        {
           path: '/jotter',
           name: 'Jotter',
           component: () => import('../components/jotter/Articles')
@@ -106,6 +111,11 @@ export const createRouter = routes => new Router({
           path: '/index',
           name: 'AppIndex',
           component: () => import('../components/home/AppIndex')
+        },
+        {
+          path: '/tool',
+          name: 'MarkTool',
+          component: () => import('../components/tool/MarkTool')
         },
         {
           path: '/jotter',

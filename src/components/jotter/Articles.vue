@@ -1,5 +1,9 @@
 <template>
   <div style="margin-top: 40px">
+    <el-aside style="width: 200px;margin-top: 20px">
+      <switch></switch>
+      <JotterNav @indexSelect="listByCategory" ref="jotterNav"></JotterNav>
+    </el-aside>
     <!--<el-button @click="addArticle()">添加文章</el-button>-->
     <div class="articles-area">
       <el-card style="text-align: left">
@@ -28,9 +32,10 @@
 </template>
 
 <script>
-
+import JotterNav from './JotterNav'
 export default {
   name: 'Articles',
+  components: {JotterNav},
   data () {
     return {
       articles: [],
@@ -67,7 +72,6 @@ export default {
 <style scoped>
   .articles-area {
     width: 990px;
-    height: 750px;
     margin-left: auto;
     margin-right: auto;
   }
