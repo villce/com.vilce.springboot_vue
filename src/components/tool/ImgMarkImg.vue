@@ -8,9 +8,20 @@
               action="https://www.mocky.io/v2/5185415ba171ea3a00704eed/posts/"
               list-type="picture-card"
               :limit="1"
-              :on-change="handleChange"
-              :on-remove="handleRemove"
-              :class="{hide:hideUploadCard}">
+              :on-change="sourceChange"
+              :on-remove="sourceRemove"
+              :class="{hide:sourceHideUploadCard}">
+              <i class="el-icon-plus"></i>
+            </el-upload>
+          </el-form-item>
+          <el-form-item label="水印图片" :label-width="formLabelWidth" prop="iconImg">
+            <el-upload
+              action="https://www.mocky.io/v2/5185415ba171ea3a00704eed/posts/"
+              list-type="picture-card"
+              :limit="1"
+              :on-change="iconChange"
+              :on-remove="iconRemove"
+              :class="{hide:iconHideUploadCard}">
               <i class="el-icon-plus"></i>
             </el-upload>
           </el-form-item>
@@ -21,17 +32,6 @@
               inactive-color="#ff4949"
               @change="changePaved">
             </el-switch>
-          </el-form-item>
-          <el-form-item label="文字颜色" :label-width="formLabelWidth" prop="color">
-            <el-color-picker v-model="form.color" :predefine="predefineColors"></el-color-picker>
-          </el-form-item>
-          <el-form-item label="文字大小" :label-width="formLabelWidth" prop="wordSize">
-            <el-slider
-              :min="0"
-              :max="100"
-              v-model="form.wordSize"
-              show-input>
-            </el-slider>
           </el-form-item>
           <el-form-item label="水印旋转角度" :label-width="formLabelWidth" prop="degree">
             <el-slider
@@ -57,18 +57,8 @@
               show-input>
             </el-slider>
           </el-form-item>
-          <el-form-item label="水印文字" :label-width="formLabelWidth" prop="word">
-            <el-input
-              type="textarea"
-              :rows="2"
-              maxlength="20"
-              show-word-limit
-              placeholder="请输入水印文字"
-              v-model="form.word">
-            </el-input>
-          </el-form-item>
         </el-form>
-        <el-button class="add-button" type="success" @click="markImg">为图片生成文字水印</el-button>
+        <el-button class="add-button" type="success" @click="markImg">为图片生成图片水印</el-button>
         <el-button class="download-button" type="warning" :disabled="downloadStatus" @click="downloadMarkImg">下载水印图片
         </el-button>
       </div>
@@ -87,13 +77,13 @@
     name: 'ImgWaterMark',
     data() {
       return {
-        hideUploadCard: false,
+        sourceHideUploadCard: false,
+        iconHideUploadCard: false,
         markImgSrc: 'http://120.55.169.142:8006/image/file/0.png',
         changeX_visible: false,
         changeY_visible: false,
         downloadStatus: true,
         form: {
-          word: '',
           wordSize: 50,
           color: '#000000',
           degree: 0,
@@ -102,6 +92,7 @@
           changeY: 0
         },
         sourceFile: null,
+        iconFile: null,
         predefineColors: [
           '#ff4500',
           '#ff8c00',
@@ -127,26 +118,32 @@
           this.changeY_visible = true;
         }
       },
-      handleRemove(file, fileList) {
-        this.hideUploadCard = fileList.length >= 1;
+      sourceRemove(file, fileList) {
+        this.sourceHideUploadCard = fileList.length >= 1;
         this.markImgSrc = 'http://120.55.169.142:8006/image/file/0.png';
       },
-      handleChange(file, fileList) {
-        this.hideUploadCard = fileList.length >= 1;
+      sourceChange(file, fileList) {
+        this.sourceHideUploadCard = fileList.length >= 1;
         this.sourceFile = fileList[0].raw;
+      },
+      iconRemove(file, fileList) {
+        this.iconHideUploadCard = fileList.length >= 1;
+        this.markImgSrc = 'http://120.55.169.142:8006/image/file/0.png';
+      },
+      iconChange(file, fileList) {
+        this.iconHideUploadCard = fileList.length >= 1;
+        this.iconFile = fileList[0].raw;
       },
       markImg() {
         var formData = new FormData();
         formData.append("sourceFile", this.sourceFile);
-        formData.append('word', this.form.word);
-        formData.append('wordSize', this.form.wordSize);
-        formData.append('color', this.form.color);
+        formData.append("iconFile", this.iconFile);
         formData.append('degree', this.form.degree);
         formData.append('paved', this.form.paved);
         formData.append('changeX', this.form.changeX);
         formData.append('changeY', this.form.changeY);
         this.$axios
-          .post('/mark/wordToImage', formData).then(resp => {
+          .post('/mark/imageToImage', formData).then(resp => {
           if (resp && resp.data.status === 0) {
             this.$message({
               type: 'info',
@@ -183,7 +180,7 @@
           // 创建a链接
           const a = document.createElement('a')
           a.href = base64
-          a.download = 'textMark'
+          a.download = 'imgMark'
           // 触发a链接点击事件，浏览器开始下载文件
           a.click()
         }

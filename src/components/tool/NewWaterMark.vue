@@ -22,7 +22,7 @@
               show-input>
             </el-slider>
           </el-form-item>
-          <el-form-item label="文字旋转角度" :label-width="formLabelWidth" prop="degree">
+          <el-form-item label="水印旋转角度" :label-width="formLabelWidth" prop="degree">
             <el-slider
               :min="-90"
               :max="90"
@@ -30,7 +30,7 @@
               show-input>
             </el-slider>
           </el-form-item>
-          <el-form-item label="文字X轴偏移量" v-show="changeX_visible" :label-width="formLabelWidth" prop="changeX">
+          <el-form-item label="水印X轴偏移量" v-show="changeX_visible" :label-width="formLabelWidth" prop="changeX">
             <el-slider
               :min="-1020"
               :max="1020"
@@ -38,7 +38,7 @@
               show-input>
             </el-slider>
           </el-form-item>
-          <el-form-item label="文字Y轴偏移量" v-show="changeY_visible" :label-width="formLabelWidth" prop="changeY">
+          <el-form-item label="水印Y轴偏移量" v-show="changeY_visible" :label-width="formLabelWidth" prop="changeY">
             <el-slider
               :min="-510"
               :max="510"
@@ -161,7 +161,7 @@
           // 创建a链接
           const a = document.createElement('a')
           a.href = base64
-          a.download = '透明水印图'
+          a.download = 'newMark'
           // 触发a链接点击事件，浏览器开始下载文件
           a.click()
         }
