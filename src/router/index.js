@@ -17,43 +17,35 @@ export default new Router({
       // home页面并不需要被访问，只是作为其它组件的父组件
       path: '/home',
       name: 'Home',
-      component: Home,
-      redirect: '/index',
-      children: [
-        {
-          path: '/index',
-          name: 'AppIndex',
-          component: () => import('../components/home/AppIndex')
-        },
-        {
-          path: '/tool',
-          name: 'MarkTool',
-          component: () => import('../components/tool/MarkTool')
-        },
-        {
-          path: '/jotter',
-          name: 'Jotter',
-          component: () => import('../components/jotter/Articles')
-        },
-        {
-          path: '/jotter/article',
-          name: 'Article',
-          component: () => import('../components/jotter/ArticleDetails')
-        },
-        {
-          path: '/admin/content/editor',
-          name: 'Editor',
-          component: () => import('../components/admin/content/ArticleEditor'),
-          meta: {
-            requireAuth: true
-          }
-        },
-        {
-          path: '/library',
-          name: 'Library',
-          component: () => import('../components/library/LibraryIndex')
-        }
-      ]
+      component: () => import('../components/Home')
+    },
+    {
+      path: '/index',
+      name: 'Index',
+      component: () => import('../components/Home')
+    },
+    {
+      path: '/tool',
+      name: 'MarkTool',
+      component: () => import('../components/home/tool/MarkTool')
+    },
+    {
+      path: '/jotter',
+      name: 'Jotter',
+      component: () => import('../components/home/jotter/Articles')
+    },
+    {
+      path: '/jotter/article',
+      name: 'Article',
+      component: () => import('../components/home/jotter/ArticleDetails')
+    },
+    {
+      path: '/admin/content/editor',
+      name: 'Editor',
+      component: () => import('../components/admin/content/ArticleEditor'),
+      meta: {
+        requireAuth: true
+      }
     },
     {
       path: '/login',
@@ -104,43 +96,35 @@ export const createRouter = routes => new Router({
       // home页面并不需要被访问，只是作为其它组件的父组件
       path: '/home',
       name: 'Home',
-      component: Home,
-      redirect: '/index',
-      children: [
-        {
-          path: '/index',
-          name: 'AppIndex',
-          component: () => import('../components/home/AppIndex')
-        },
-        {
-          path: '/tool',
-          name: 'MarkTool',
-          component: () => import('../components/tool/MarkTool')
-        },
-        {
-          path: '/jotter',
-          name: 'Jotter',
-          component: () => import('../components/jotter/Articles')
-        },
-        {
-          path: '/jotter/article',
-          name: 'Article',
-          component: () => import('../components/jotter/ArticleDetails')
-        },
-        {
-          path: '/admin/content/editor',
-          name: 'Editor',
-          component: () => import('../components/admin/content/ArticleEditor'),
-          meta: {
-            requireAuth: true
-          }
-        },
-        {
-          path: '/library',
-          name: 'Library',
-          component: () => import('../components/library/LibraryIndex')
-        }
-      ]
+      component: () => import('../components/Home')
+    },
+    {
+      path: '/index',
+      name: 'Index',
+      component: () => import('../components/Home')
+    },
+    {
+      path: '/tool',
+      name: 'MarkTool',
+      component: () => import('../components/home/tool/MarkTool')
+    },
+    {
+      path: '/jotter',
+      name: 'Jotter',
+      component: () => import('../components/home/jotter/Articles')
+    },
+    {
+      path: '/jotter/article',
+      name: 'Article',
+      component: () => import('../components/home/jotter/ArticleDetails')
+    },
+    {
+      path: '/admin/content/editor',
+      name: 'Editor',
+      component: () => import('../components/admin/content/ArticleEditor'),
+      meta: {
+        requireAuth: true
+      }
     },
     {
       path: '/login',

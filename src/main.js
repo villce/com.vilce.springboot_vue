@@ -61,7 +61,7 @@ import {
   Loading,
   MessageBox,
   Message,
-  Notification, Dropdown, DropdownMenu, ColorPicker, Cascader, Slider,
+  Notification, Dropdown, DropdownMenu, ColorPicker, Cascader, Slider, Avatar,
 } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
@@ -122,6 +122,7 @@ Vue.use(ColorPicker)
 Vue.use(Cascader)
 Vue.use(Option)
 Vue.use(Slider)
+Vue.use(Avatar)
 Vue.use(Loading.directive)
 
 Vue.prototype.$loading = Loading.service
