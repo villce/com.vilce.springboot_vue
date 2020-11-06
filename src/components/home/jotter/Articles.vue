@@ -1,79 +1,135 @@
 <template>
-  <div style="margin-top: 40px">
-    <el-aside style="width: 200px;margin-top: 20px">
-      <switch></switch>
-      <JotterNav @indexSelect="listByCategory" ref="jotterNav"></JotterNav>
-    </el-aside>
-    <!--<el-button @click="addArticle()">添加文章</el-button>-->
-    <div class="articles-area">
-      <el-card style="text-align: left">
-        <div v-for="article in articles" :key="article.id">
-          <div style="float:left;width:85%;height: 150px;">
-            <router-link class="article-link" :to="{path:'jotter/article',query:{id: article.id}}"><span style="font-size: 20px"><strong>{{article.article_title}}</strong></span></router-link>
-            <el-divider content-position="left">{{article.article_date}}</el-divider>
-            <router-link class="article-link" :to="{path:'jotter/article',query:{id: article.id}}"><p>{{article.article_abstract}}</p></router-link>
+  <div style="height:100%;width:100%">
+    <el-row type="flex" justify="center">
+      <el-col :span="3">
+        <el-card class="articles-title" shadow="always">
+          <div slot="header" class="clearfix">
+            <span>vilce</span>
           </div>
-          <el-image
-            style="margin:18px 0 0 30px;width:100px;height: 100px"
-            :src="article.article_cover"
-            fit="cover"></el-image>
-          <el-divider></el-divider>
-        </div>
-      </el-card>
-    </div>
-    <el-pagination
-      background
-      layout="total, prev, pager, next, jumper"
-      @current-change="handleCurrentChange"
-      :page-size="pageSize"
-      :total="total">
-    </el-pagination>
+          <div class="el-card__body mid" style="margin-left: -18px">
+            <div class="text item" style="text-align: left; margin-top: -18px">
+              <i class="el-icon-s-home"></i>
+              <span>博客首页</span>
+            </div>
+            <div class="text item" style="text-align: left">
+              <i class="el-icon-menu"></i>
+              <span>分类</span>
+            </div>
+            <div class="text item" style="text-align: left">
+              <i class="el-icon-s-order"></i>
+              <span>归档</span>
+            </div>
+            <div class="text item" style="text-align: left; margin-bottom: -18px">
+              <i class="el-icon-search"></i>
+              <span>搜索</span>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="3" class="articles-area">
+        <el-card style="text-align: left">
+          <div v-for="article in articles" :key="article.id">
+            <div style="float:left;width:85%;height: 150px;">
+              <router-link class="article-link" :to="{path:'jotter/article',query:{id: article.id}}">
+                <span style="font-size: 20px">
+                  <strong>{{article.title}}</strong>
+                </span>
+              </router-link>
+              <el-divider content-position="left">{{article.date}}</el-divider>
+              <router-link class="article-link" :to="{path:'jotter/article',query:{id: article.id}}">
+                <p>{{article.introduction}}</p>
+              </router-link>
+            </div>
+          </div>
+        </el-card>
+        <br>
+        <el-pagination
+          background
+          layout="total, prev, pager, next, jumper"
+          @current-change="handleCurrentChange"
+          :page-size="pageSize"
+          :total="3">
+        </el-pagination>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
-import JotterNav from './JotterNav'
-export default {
-  name: 'Articles',
-  components: {JotterNav},
-  data () {
-    return {
-      articles: [],
-      pageSize: 4,
-      total: 0
-    }
-  },
-  mounted () {
-    this.loadArticles()
-  },
-  methods: {
-    loadArticles () {
-      var _this = this
-      this.$axios.get('/article/listArticles?page=1&size=' + this.pageSize).then(resp => {
-        if (resp && resp.data.status === 0) {
-          _this.articles = resp.data.data
-          _this.total = resp.data.totalElements
-        }
-      })
+  export default {
+    name: 'Articles',
+    data() {
+      return {
+        articles: [],
+        pageSize: 2,
+        total: 1
+      }
     },
-    handleCurrentChange (page) {
-      var _this = this
-      this.$axios.get('/article/listArticles?page=' + page + '&size='+ this.pageSize).then(resp => {
-        if (resp && resp.data.status === 0) {
-          _this.articles = resp.data.data
-          _this.total = resp.data.totalElements
-        }
-      })
+    mounted() {
+      this.loadArticles()
+      this.loadPage()
+    },
+    methods: {
+      loadArticles() {
+        var _this = this;
+        this.$axios.get('/article/listArticles/1/' + this.pageSize).then(resp => {
+          if (resp && resp.data.status === 0) {
+            _this.articles = resp.data.data
+          }
+        })
+      },
+      loadPage() {
+        this.$axios.get('/article/countArticle').then(resp => {
+          if (resp && resp.data.status === 0) {
+            var articlesNum = resp.data.data;
+            this.total =  Math.ceil(articlesNum / this.pageSize);
+            console.info(this.total)
+          }
+        })
+      },
+      handleCurrentChange(page) {
+        var _this = this;
+        this.$axios.get('/article/countArticle/' + page + '/' + this.pageSize).then(resp => {
+          if (resp && resp.data.status === 0) {
+            _this.articles = resp.data.data
+          }
+        })
+      }
     }
   }
-}
 </script>
 
-<style scoped>
+<style>
+  .text {
+    font-size: 14px;
+  }
+
+  .item {
+    margin-bottom: 10px;
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
+  }
+
+  .clearfix:after {
+    clear: both
+  }
+
+  .articles-title {
+    width: 200px;
+  }
+
   .articles-area {
-    width: 990px;
-    margin-left: auto;
-    margin-right: auto;
+    width: 1000px;
+  }
+
+  .el-card__header {
+    background-color: #1F1F1F;
+    font-size: 28px;
+    color: #eaeaea;
   }
 
   .article-link {
