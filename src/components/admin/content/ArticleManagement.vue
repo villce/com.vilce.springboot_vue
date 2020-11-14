@@ -100,7 +100,7 @@ export default {
   methods: {
     loadArticles () {
       var _this = this
-      this.$axios.get('/article/listArticles?page=1&size=' + this.pageSize ).then(resp => {
+      this.$axios.get('/article/listArticles/1/' + this.pageSize ).then(resp => {
         if (resp && resp.data.status === 0) {
           _this.articles = resp.data.data
           _this.total = resp.data.totalElements
@@ -109,7 +109,7 @@ export default {
     },
     handleCurrentChange (page) {
       var _this = this
-      this.$axios.get('/article/listArticles/?page=' + page + '&size=' + this.pageSize).then(resp => {
+      this.$axios.get('/article/listArticles/' + page + '/' + this.pageSize).then(resp => {
         if (resp && resp.data.status === 0) {
           _this.articles = resp.data.data
           _this.total = resp.data.totalElements

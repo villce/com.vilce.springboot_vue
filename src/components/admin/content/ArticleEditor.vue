@@ -14,7 +14,7 @@
         style="margin: 10px 0px;font-size: 18px;"
         placeholder="请输入标题"></el-input>
     </el-row>
-    <el-row style="height: calc(100vh - 140px);">
+    <el-row style="height: calc(100vh - 140px); text-align: left">
       <mavon-editor
         v-model="article.article_content_md"
         style="height: 100%;"
@@ -27,6 +27,35 @@
       <el-dialog
         :visible.sync="dialogVisible"
         width="30%">
+        <el-divider content-position="left">文章标签</el-divider>
+        <el-tag
+          :key="tag"
+          v-for="tag in dynamicTags"
+          closable
+          :disable-transitions="false"
+          @close="handleClose(tag)">
+          {{tag}}
+        </el-tag>
+        <el-input
+          class="input-new-tag"
+          v-if="inputVisible"
+          v-model="inputValue"
+          ref="saveTagInput"
+          size="small"
+          @keyup.enter.native="handleInputConfirm"
+          @blur="handleInputConfirm"
+        >
+        </el-input>
+        <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 添加新标签</el-button>
+        <el-divider content-position="left">文章类型</el-divider>
+        <el-select v-model="value" placeholder="请选择">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
         <el-divider content-position="left">摘要</el-divider>
         <el-input
           type="textarea"
@@ -56,8 +85,19 @@ export default {
   components: {ImgUpload},
   data () {
     return {
+      dynamicTags: [],
+      inputVisible: false,
+      inputValue: '',
       article: {},
-      dialogVisible: false
+      dialogVisible: false,
+      options: [{
+        value: '笔记',
+        label: '笔记'
+      }, {
+        value: '文章',
+        label: '文章'
+      }],
+      value: ''
     }
   },
   mounted () {
@@ -66,6 +106,23 @@ export default {
     }
   },
   methods: {
+    handleClose(tag) {
+      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+    },
+    showInput() {
+      this.inputVisible = true;
+      this.$nextTick(_this => {
+        this.$refs.saveTagInput.$refs.input.focus();
+      });
+    },
+    handleInputConfirm() {
+      let inputValue = this.inputValue;
+      if (inputValue) {
+        this.dynamicTags.push(inputValue);
+      }
+      this.inputVisible = false;
+      this.inputValue = '';
+    },
     saveArticles (value, render) {
       // value 是 md，render 是 html
       this.$confirm('是否保存并发布文章?', '提示', {
@@ -104,3 +161,21 @@ export default {
   }
 }
 </script>
+
+<style>
+  .el-tag + .el-tag {
+    margin-left: 10px;
+  }
+  .button-new-tag {
+    margin-left: 10px;
+    height: 32px;
+    line-height: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .input-new-tag {
+    width: 90px;
+    margin-left: 10px;
+    vertical-align: bottom;
+  }
+</style>

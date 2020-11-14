@@ -35,11 +35,21 @@
                   <strong>{{article.title}}</strong>
                 </span>
               </router-link>
-              <el-divider content-position="left">{{article.date}}</el-divider>
+              <el-divider content-position="left">
+                <i class="el-icon-edit"></i>
+                <span> {{article.publishDate}}</span>
+                <i class="el-icon-folder"></i>
+                <span> {{article.type}}</span>
+              </el-divider>
               <router-link class="article-link" :to="{path:'jotter/article',query:{id: article.id}}">
                 <p>{{article.introduction}}</p>
               </router-link>
             </div>
+            <el-image
+              style="margin:18px 0 0 30px;width:100px;height: 100px"
+              :src="article.cover"
+              fit="cover"></el-image>
+            <el-divider></el-divider>
           </div>
         </el-card>
         <br>
@@ -89,7 +99,7 @@
       },
       handleCurrentChange(page) {
         var _this = this;
-        this.$axios.get('/article/countArticle/' + page + '/' + this.pageSize).then(resp => {
+        this.$axios.get('/article/listArticles/' + page + '/' + this.pageSize).then(resp => {
           if (resp && resp.data.status === 0) {
             _this.articles = resp.data.data
           }
