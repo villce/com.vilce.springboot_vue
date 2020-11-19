@@ -1,5 +1,5 @@
 <template>
-    <el-col :span="3" class="articles-area" style="margin-top: -18px">
+    <el-col :span="3" class="articles-area" style="margin-top: -8px">
       <el-card style="text-align: left">
         <div v-for="article in articles" :key="article.id">
           <div style="float:left;width:85%;height: 150px;">
@@ -60,7 +60,7 @@
         })
       },
       loadPage() {
-        this.$axios.get('/article/countArticle').then(resp => {
+        this.$axios.get('/article/statistics/countArticle').then(resp => {
           if (resp && resp.data.status === 0) {
             var articlesNum = resp.data.data;
             this.total =  Math.ceil(articlesNum / this.pageSize);

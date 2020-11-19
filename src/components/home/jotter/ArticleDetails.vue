@@ -2,10 +2,10 @@
   <div class="articles-area">
     <el-card style="text-align: left;width: 990px;margin: 35px auto 0 auto">
       <div>
-        <span style="font-size: 20px"><strong>{{article.article_title}}</strong></span>
-        <el-divider content-position="left">{{article.article_date}}</el-divider>
+        <span style="font-size: 20px"><strong>{{article.title}}</strong></span>
+        <el-divider content-position="left">{{article.publishDate}}</el-divider>
         <div class="markdown-body">
-          <div v-html="article.article_content_html"></div>
+          <div v-html="article.contentHtml"></div>
         </div>
       </div>
     </el-card>
@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     loadArticle () {
-      var _this = this
+      var _this = this;
       this.$axios.get('/article/getOneArticle?id=' + this.$route.query.id).then(resp => {
         if (resp && resp.data.status === 0) {
           _this.article = resp.data.data
