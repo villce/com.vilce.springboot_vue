@@ -1,109 +1,66 @@
 <template>
   <div style="height:100%;width:100%">
     <el-row type="flex" justify="center">
-      <el-col :span="3">
+      <el-col :span="3" style="margin-top: -18px">
         <el-card class="articles-title" shadow="always">
           <div slot="header" class="clearfix">
             <span>vilce</span>
           </div>
           <div class="el-card__body mid" style="margin-left: -18px">
-            <div class="text item" style="text-align: left; margin-top: -18px">
+            <el-row class="text" style="text-align: left; margin-top: -18px" @click.native="articleHome">
               <i class="el-icon-s-home"></i>
               <span>博客首页</span>
-            </div>
-            <div class="text item" style="text-align: left">
+            </el-row>
+            <el-row class="text" style="text-align: left" @click.native="articleType">
               <i class="el-icon-menu"></i>
               <span>分类</span>
-            </div>
-            <div class="text item" style="text-align: left">
+            </el-row>
+            <el-row class="text" style="text-align: left" @click.native="articleArchive">
               <i class="el-icon-s-order"></i>
               <span>归档</span>
-            </div>
-            <div class="text item" style="text-align: left; margin-bottom: -18px">
+            </el-row>
+            <el-row class="text" style="text-align: left" @click.native="articleLabel">
+              <i class="el-icon-s-flag"></i>
+              <span>标签</span>
+            </el-row>
+            <el-row class="text" style="text-align: left; margin-bottom: -18px" @click.native="searchArticle">
               <i class="el-icon-search"></i>
               <span>搜索</span>
-            </div>
+            </el-row>
           </div>
         </el-card>
       </el-col>
-      <el-col :span="3" class="articles-area">
-        <el-card style="text-align: left">
-          <div v-for="article in articles" :key="article.id">
-            <div style="float:left;width:85%;height: 150px;">
-              <router-link class="article-link" :to="{path:'jotter/article',query:{id: article.id}}">
-                <span style="font-size: 20px">
-                  <strong>{{article.title}}</strong>
-                </span>
-              </router-link>
-              <el-divider content-position="left">
-                <i class="el-icon-edit"></i>
-                <span> {{article.publishDate}}</span>
-                <i class="el-icon-folder"></i>
-                <span> {{article.type}}</span>
-              </el-divider>
-              <router-link class="article-link" :to="{path:'jotter/article',query:{id: article.id}}">
-                <p>{{article.introduction}}</p>
-              </router-link>
-            </div>
-            <el-image
-              style="margin:18px 0 0 30px;width:100px;height: 100px"
-              :src="article.cover"
-              fit="cover"></el-image>
-            <el-divider></el-divider>
-          </div>
-        </el-card>
-        <br>
-        <el-pagination
-          background
-          layout="total, prev, pager, next, jumper"
-          @current-change="handleCurrentChange"
-          :page-size="pageSize"
-          :total="3">
-        </el-pagination>
-      </el-col>
+      <ArticlesIndex></ArticlesIndex>
     </el-row>
   </div>
 </template>
 
 <script>
+  import ArticlesIndex from "./ArticlesIndex"
+
   export default {
     name: 'Articles',
+    components: {ArticlesIndex},
     data() {
-      return {
-        articles: [],
-        pageSize: 2,
-        total: 1
-      }
+      return {}
     },
     mounted() {
-      this.loadArticles()
-      this.loadPage()
     },
     methods: {
-      loadArticles() {
-        var _this = this;
-        this.$axios.get('/article/listArticles/1/' + this.pageSize).then(resp => {
-          if (resp && resp.data.status === 0) {
-            _this.articles = resp.data.data
-          }
-        })
+      articleHome() {
+        console.info("前往首页")
       },
-      loadPage() {
-        this.$axios.get('/article/countArticle').then(resp => {
-          if (resp && resp.data.status === 0) {
-            var articlesNum = resp.data.data;
-            this.total =  Math.ceil(articlesNum / this.pageSize);
-            console.info(this.total)
-          }
-        })
+      articleType() {
+        console.info("获取文章分类")
       },
-      handleCurrentChange(page) {
-        var _this = this;
-        this.$axios.get('/article/listArticles/' + page + '/' + this.pageSize).then(resp => {
-          if (resp && resp.data.status === 0) {
-            _this.articles = resp.data.data
-          }
-        })
+      articleArchive() {
+        console.info("文章归档")
+      },
+      articleLabel() {
+        console.info("文章标签")
+      },
+      searchArticle() {
+        console.info("搜索文章")
       }
     }
   }
@@ -112,9 +69,6 @@
 <style>
   .text {
     font-size: 14px;
-  }
-
-  .item {
     margin-bottom: 10px;
   }
 
@@ -128,26 +82,13 @@
     clear: both
   }
 
-  .articles-title {
-    width: 200px;
-  }
-
-  .articles-area {
-    width: 1000px;
-  }
-
   .el-card__header {
     background-color: #1F1F1F;
     font-size: 28px;
     color: #eaeaea;
   }
 
-  .article-link {
-    text-decoration: none;
-    color: #606266;
-  }
-
-  .article-link:hover {
+  .el-row:hover {
     color: #409EFF;
   }
 </style>
