@@ -1,30 +1,16 @@
-# com.vilce.vue.learn
+# vilce网页搭建
+## 版本功能迭代
+- 1.0.0<br>
 
-> A Vue.js project
+&emsp;&emsp;模拟【白卷】搭建了前后端分离项目，其中包含了基础的笔记、图书馆、以及管理系统。
+- 1.0.1<br>
 
-## Build Setup
+&emsp;&emsp;添加了水印工具页面，包含透明图片文字水印、图片添加文字水印、图片添加图片水印。
+- 2.0.0<br>
 
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-
-# run unit tests
-npm run unit
-
-# run e2e tests
-npm run e2e
-
-# run all tests
-npm test
-```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+&emsp;&emsp;尝试对页面进行大幅度调整，搭建完全属于自己风格的网页：<br>
+1. 首页更换，模块化展示功能（完成）
+2. 笔记更换为博客（开发中）
+3. 删除无用的图书馆功能（完成）
+4. 水印工具归到工具模块（完成）
+5. 管理系统隐藏在用户登录后（开发中）
