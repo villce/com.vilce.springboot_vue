@@ -50,12 +50,12 @@ export default new Router({
     {
       path: '/login',
       name: 'Login',
-      component: () => import('../components/user/Login')
+      component: () => import('../components/home/user/Login')
     },
     {
       path: '/register',
       name: 'Register',
-      component: () => import('../components/user/Register')
+      component: () => import('../components/home/user/Register')
     },
     {
       path: '/admin',
@@ -129,12 +129,12 @@ export const createRouter = routes => new Router({
     {
       path: '/login',
       name: 'Login',
-      component: () => import('../components/user/Login')
+      component: () => import('../components/home/user/Login')
     },
     {
       path: '/register',
       name: 'Register',
-      component: () => import('../components/user/Register')
+      component: () => import('../components/home/user/Register')
     },
     {
       path: '/admin',

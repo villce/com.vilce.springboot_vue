@@ -144,6 +144,7 @@ Vue.config.productionTip = false
 Vue.use(mavonEditor)
 
 router.beforeEach((to, from, next) => {
+  // 已登录后访问admin下页面，初始化菜单
   if (store.state.username && to.path.startsWith('/admin')) {
     initAdminMenu(router, store)
   }
@@ -179,7 +180,7 @@ axios.interceptors.response.use(
   error => {
     if (error) {
       store.commit('logout')
-      router.replace('/login')
+      // router.replace('/login')
     }
     // 返回接口返回的错误信息
     return Promise.reject(error)

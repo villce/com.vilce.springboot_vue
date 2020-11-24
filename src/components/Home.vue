@@ -1,5 +1,6 @@
 <template>
-  <div style="height:100%;width:100%" class="home">
+  <body id="home">
+    <div style="height:100%;width:100%" class="home">
     <el-row type="flex" justify="center">
       <el-col :span="15" class="user">
         <div class="block">
@@ -36,6 +37,7 @@
     </el-row>
     <br>
   </div>
+  </body>
 </template>
 
 <script>
@@ -45,7 +47,18 @@
         circleUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
       }
     },
+    mounted() {
+      this.currentUser();
+    },
     methods: {
+      currentUser() {
+        var _this = this;
+        this.$axios.get('/login/currentUser').then(resp => {
+          if (resp && resp.data.status === 0) {
+            _this.circleUrl = resp.data.data.icon;
+          }
+        })
+      },
       handleJotter() {
         console.info("博客");
         this.$router.replace({path: '/jotter'});
@@ -61,19 +74,17 @@
 </script>
 
 <style>
-  body {
-    margin: 0;
-    padding: 0;
-  }
-
-  .home {
-    background: url("../assets/img/hzw/noFace/1.jpg");
+  #home {
+    background: url("../assets/img/hzw/noFace/1.jpg") no-repeat;
+    background-position: center;
     position: fixed;
     width: 100%;
     height: 100%;
-    background-size: 100% 100%;
+    background-size: cover;
   }
-
+  body{
+    margin: 0;
+  }
   .image {
     width: 100%;
     display: block;
