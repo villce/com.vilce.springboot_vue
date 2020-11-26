@@ -40,9 +40,9 @@ export default new Router({
       component: () => import('../components/home/jotter/ArticleDetails')
     },
     {
-      path: '/admin/content/editor',
-      name: 'Editor',
-      component: () => import('../components/admin/content/ArticleEditor'),
+      path: '/admin/content/articleEditor',
+      name: 'ArticleEditor',
+      component: () => import('../components/admin/content/jotter/ArticleEditor'),
       meta: {
         requireAuth: true
       }
@@ -119,9 +119,9 @@ export const createRouter = routes => new Router({
       component: () => import('../components/home/jotter/ArticleDetails')
     },
     {
-      path: '/admin/content/editor',
-      name: 'Editor',
-      component: () => import('../components/admin/content/ArticleEditor'),
+      path: '/admin/content/articleEditor',
+      name: 'ArticleEditor',
+      component: () => import('../components/admin/content/jotter/ArticleEditor'),
       meta: {
         requireAuth: true
       }

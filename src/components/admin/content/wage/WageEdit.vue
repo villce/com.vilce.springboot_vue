@@ -137,7 +137,7 @@
 </template>
 
 <script>
-  import ImgUpload from './ImgUpload'
+  import ImgUpload from '../ImgUpload'
   export default {
     name: 'WageEdit',
     components: {ImgUpload},

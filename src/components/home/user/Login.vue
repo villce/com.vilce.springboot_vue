@@ -46,9 +46,9 @@ export default{
         })
         .then(resp => {
           if (resp.data.status === 0) {
-            var user = resp.data.data;
+            var username = resp.data.data.username;
             // 父子组件信息传递，提示已登录的用户
-            _this.$store.commit('login', user);
+            _this.$store.commit('login', username);
             var path = _this.$route.query.redirect;
             _this.$router.replace({path: path === '/' || path === undefined ? '/admin' : path})
           } else {

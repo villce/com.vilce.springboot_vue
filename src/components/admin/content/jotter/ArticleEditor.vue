@@ -10,13 +10,13 @@
     </el-row>
     <el-row>
       <el-input
-        v-model="article.article_title"
+        v-model="article.title"
         style="margin: 10px 0px;font-size: 18px;"
         placeholder="请输入标题"></el-input>
     </el-row>
     <el-row style="height: calc(100vh - 140px); text-align: left">
       <mavon-editor
-        v-model="article.article_content_md"
+        v-model="article.contentMd"
         style="height: 100%;"
         ref=md
         @save="saveArticles"
@@ -48,7 +48,7 @@
         </el-input>
         <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 添加新标签</el-button>
         <el-divider content-position="left">文章类型</el-divider>
-        <el-select v-model="value" placeholder="请选择">
+        <el-select v-model="article.type" placeholder="请选择">
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -59,13 +59,13 @@
         <el-divider content-position="left">摘要</el-divider>
         <el-input
           type="textarea"
-          v-model="article.article_abstract"
+          v-model="article.introduction"
           rows="6"
           maxlength="255"
           show-word-limit></el-input>
         <el-divider content-position="left">封面</el-divider>
         <div style="margin-top: 20px">
-          <el-input v-model="article.article_cover" autocomplete="off" placeholder="图片 URL"></el-input>
+          <el-input v-model="article.cover" placeholder="图片 URL"></el-input>
           <img-upload @onUpload="uploadImg" ref="imgUpload" style="margin-top: 5px"></img-upload>
         </div>
         <span slot="footer" class="dialog-footer">
@@ -78,10 +78,10 @@
 </template>
 
 <script>
-import ImgUpload from './ImgUpload'
+import ImgUpload from '../ImgUpload'
 
 export default {
-  name: 'Editor',
+  name: 'ArticleEditor',
   components: {ImgUpload},
   data () {
     return {
@@ -102,7 +102,8 @@ export default {
   },
   mounted () {
     if (this.$route.params.article) {
-      this.article = this.$route.params.article
+      this.article = this.$route.params.article;
+      this.dynamicTags = this.article.label;
     }
   },
   methods: {
@@ -133,11 +134,13 @@ export default {
           this.$axios
             .post('/article/saveArticle', {
               id: this.article.id,
-              article_title: this.article.article_title,
+              article_type: this.article_type.value,
+              article_label: this.dynamicTags,
+              article_title: this.article.title,
               article_content_md: value,
               article_content_html: render,
-              article_abstract: this.article.article_abstract,
-              article_cover: this.article.article_cover,
+              article_abstract: this.article.introduction,
+              article_cover: this.article.cover,
               article_date: new Date()
             }).then(resp => {
             if (resp && resp.data.status === 0) {
@@ -156,7 +159,9 @@ export default {
       })
     },
     uploadImg () {
-      this.article.article_cover = this.$refs.imgUpload.url
+      var _this = this;
+      _this.article.cover = this.$refs.imgUpload.url;
+      console.info(_this.article.cover);
     }
   }
 }

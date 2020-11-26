@@ -7,7 +7,7 @@
         <el-breadcrumb-item>文章管理</el-breadcrumb-item>
       </el-breadcrumb>
     </el-row>
-    <el-link href="/admin/content/editor" :underline="false" target="_blank" class="add-link">
+    <el-link href="/admin/content/articleEditor" :underline="false" target="_blank" class="add-link">
       <el-button type="success">写文章</el-button>
     </el-link>
     <el-card style="margin: 18px 2%;width: 95%">
@@ -24,18 +24,29 @@
           <template slot-scope="props">
             <el-form label-position="left" inline>
               <el-form-item>
-                <span>{{ props.row.article_abstract }}</span>
+                <span>{{ props.row.introduction }}</span>
               </el-form-item>
             </el-form>
           </template>
         </el-table-column>
         <el-table-column
-          prop="article_title"
+          prop="title"
           label="题目（展开查看摘要）"
           fit>
         </el-table-column>
         <el-table-column
-          prop="article_date"
+          prop="cover"
+          label="文章封面"
+          fit>
+          <template slot-scope="scope">
+            <el-image
+              style="width: 50px;height: 50px"
+              :src="scope.row.cover">
+            </el-image>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="publishDate"
           label="发布日期"
           width="200">
         </el-table-column>
@@ -72,6 +83,7 @@
           layout="total, prev, pager, next, jumper"
           @current-change="handleCurrentChange"
           :page-size="pageSize"
+          :current-page.sync="currentPage"
           :total="total">
         </el-pagination>
       </div>
@@ -84,13 +96,16 @@ export default {
   name: 'ArticleManagement',
   data () {
     return {
+      articleStatistic: [],
       articles: [],
-      pageSize: 10,
-      total: 0
+      pageSize: 2,
+      total: 1,
+      currentPage: 1
     }
   },
   mounted () {
-    this.loadArticles()
+    this.countArticles();
+    this.loadArticles();
   },
   computed: {
     tableHeight () {
@@ -98,21 +113,29 @@ export default {
     }
   },
   methods: {
+    countArticles() {
+      var _this = this;
+      this.$axios.get('/article/statistics').then(resp => {
+        if (resp && resp.data.status === 0) {
+          _this.articleStatistic = resp.data.data;
+          _this.total = _this.articleStatistic.articleNum;
+          console.info(_this.total)
+        }
+      })
+    },
     loadArticles () {
       var _this = this
       this.$axios.get('/article/listArticles/1/' + this.pageSize ).then(resp => {
         if (resp && resp.data.status === 0) {
-          _this.articles = resp.data.data
-          _this.total = resp.data.totalElements
+          _this.articles = resp.data.data;
         }
       })
     },
-    handleCurrentChange (page) {
-      var _this = this
+    handleCurrentChange(page) {
+      var _this = this;
       this.$axios.get('/article/listArticles/' + page + '/' + this.pageSize).then(resp => {
         if (resp && resp.data.status === 0) {
           _this.articles = resp.data.data
-          _this.total = resp.data.totalElements
         }
       })
     },
@@ -130,7 +153,7 @@ export default {
     editArticle (article) {
       this.$router.push(
         {
-          name: 'Editor',
+          name: 'ArticleEditor',
           params: {
             article: article
           }

@@ -12,11 +12,11 @@
     <!--index 没有用但是必需字段-->
     <el-submenu v-for="(item,i) in adminMenus" :key="i" :index="(i).toString()" style="text-align: left">
         <span slot="title" style="font-size: 17px;">
-          <i :class="item.iconCls"></i>
+          <i :class="item.icon_cls"></i>
           {{item.name_zh}}
         </span>
       <el-menu-item v-for="child in item.children" :key="child.path" :index="child.path">
-        <i :class="child.icon"></i>
+        <i :class="child.icon_cls"></i>
         {{ child.name_zh }}
       </el-menu-item>
     </el-submenu>

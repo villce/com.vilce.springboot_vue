@@ -3,14 +3,13 @@
     <el-row :gutter="5" type="flex" justify="center">
       <el-col :span="3">
         <el-card class="articles-title" shadow="always">
-          <el-row slot="header" class="clearfix" @click.native="backHome">
-            <i class="el-icon-s-home"></i>
+          <el-row slot="header" class="clearfix">
             <span>vilce</span>
           </el-row>
           <el-row type="flex" justify="center">
-            <div class="block">
-              <el-avatar :size="70" :src="circleUrl" @click.native="handleAdmin"></el-avatar>
-            </div>
+            <a class="block" href="/index">
+              <el-avatar :size="70" :src="circleUrl" style="margin-bottom: 5px"></el-avatar>
+            </a>
           </el-row>
           <el-row class="index" style="text-align: center">
             <el-link>博客<br>{{articleStatistic.articleNum}}</el-link>
@@ -104,14 +103,18 @@
       }
     },
     mounted() {
+      this.currentUser();
       this.countArticles();
       this.loadArticles();
     },
     methods: {
-      backHome() {
+      currentUser() {
         var _this = this;
-        var path = _this.$route.query.redirect
-        _this.$router.replace({path: path === '/' || path === undefined ? '/home' : path})
+        this.$axios.get('/login/currentUser').then(resp => {
+          if (resp && resp.data.status === 0) {
+            _this.circleUrl = resp.data.data.icon;
+          }
+        })
       },
       countArticles() {
         var _this = this;

@@ -2,18 +2,14 @@
   <el-upload
     class="img-upload"
     ref="upload"
-    action="http://localhost:8006/library/coversUpload"
-    with-credentials
-    :on-preview="handlePreview"
+    action="http://localhost:8006/api/image/coversUpload"
     :on-remove="handleRemove"
-    :before-remove="beforeRemove"
     :on-success="handleSuccess"
-    multiple
-    :limit="1"
-    :on-exceed="handleExceed"
-    :file-list="fileList">
+    list-type="picture"
+    :file-list="fileList"
+    :before-upload = "beforeAvatarUpload">
     <el-button size="small" type="primary">点击上传</el-button>
-    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过2M</div>
   </el-upload>
 </template>
 
@@ -27,34 +23,38 @@ export default {
     }
   },
   methods: {
-    handleRemove (file, fileList) {
-      console.log(file, fileList)
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === 'image/jpeg';
+      const isPNG = file.type === 'image/png';
+      const isPG = (isJPG || isPNG);                                      //限制图片格式为jpg / png
+      const isLt2M = file.size / 1024 / 1024 < 2;                         //限制图片大小
+      if (!isPG) {
+        this.$message.error('上传头像图片只能是 JPG 或 PNG 格式!');
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!');
+      }
+      return isPG && isLt2M
     },
-    handlePreview (file) {
-      console.log(file)
-      // 此处的 file 是整个文件
-      // console.log(file.response)
-    },
-    handleExceed (files, fileList) {
-      this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
-    },
-    beforeRemove (file, fileList) {
-      return this.$confirm(`确定移除 ${file.name}？`)
+    handleRemove(file, fileList) {
+      var _this = this;
+      this.$axios.get('/image/deleteImage?imageUrl=' + this.url).then(resp => {
+        if (resp && resp.data.status === 0) {
+          var result = resp.data.data;
+          if (result) {
+            this.$message.warning('移除成功')
+          }
+        }
+      });
     },
     handleSuccess (response) {
-      this.url = response.data
-      this.$emit('onUpload')
+      this.url = response.data;
+      this.$emit('onUpload');
       this.$message.warning('上传成功')
     },
-    clear () {
-      this.$refs.upload.clearFiles()
-    }
   }
 }
 </script>
 
 <style scoped>
-  .img-upload {
-    /*height: 200px;*/
-  }
 </style>
