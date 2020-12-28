@@ -134,8 +134,8 @@ Vue.prototype.$notify = Notification
 Vue.prototype.$message = Message
 
 var axios = require('axios')
-axios.defaults.baseURL = "http://localhost:8006/api"
-// axios.defaults.baseURL = "http://120.55.169.142:8006/"
+// axios.defaults.baseURL = "http://localhost:8006/api"
+axios.defaults.baseURL = "http://192.168.209.128:8006/api"
 // 使请求带上凭证信息
 axios.defaults.withCredentials = true
 
@@ -180,7 +180,7 @@ axios.interceptors.response.use(
   error => {
     if (error) {
       store.commit('logout')
-      // router.replace('/login')
+      router.replace('/')
     }
     // 返回接口返回的错误信息
     return Promise.reject(error)

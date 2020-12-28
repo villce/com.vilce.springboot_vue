@@ -20,30 +20,10 @@
           type="selection"
           width="55">
         </el-table-column>
-        <el-table-column type="expand">
-          <template slot-scope="props">
-            <el-form label-position="left" inline>
-              <el-form-item>
-                <span>{{ props.row.introduction }}</span>
-              </el-form-item>
-            </el-form>
-          </template>
-        </el-table-column>
         <el-table-column
           prop="title"
-          label="题目（展开查看摘要）"
+          label="题目"
           fit>
-        </el-table-column>
-        <el-table-column
-          prop="cover"
-          label="文章封面"
-          fit>
-          <template slot-scope="scope">
-            <el-image
-              style="width: 50px;height: 50px"
-              :src="scope.row.cover">
-            </el-image>
-          </template>
         </el-table-column>
         <el-table-column
           prop="publishDate"

@@ -2,23 +2,8 @@
   <div style="height:100%;width:100%">
     <el-row :gutter="5" type="flex" justify="center">
       <el-col :span="3">
-        <el-card class="articles-title" shadow="always">
-          <el-row slot="header" class="clearfix">
-            <span>vilce</span>
-          </el-row>
-          <el-row type="flex" justify="center">
-            <a class="block" href="/index">
-              <el-avatar :size="70" :src="circleUrl" style="margin-bottom: 5px"></el-avatar>
-            </a>
-          </el-row>
-          <el-row class="index" style="text-align: center">
-            <el-link>博客<br>{{articleStatistic.articleNum}}</el-link>
-            <el-divider direction="vertical"></el-divider>
-            <el-link>分类<br>{{articleStatistic.typeNum}}</el-link>
-            <el-divider direction="vertical"></el-divider>
-            <el-link>标签<br>{{articleStatistic.labelNum}}</el-link>
-          </el-row>
-        </el-card>
+        <article-statistics ref="statistics">
+        </article-statistics>
         <br>
         <el-card class="articles-title" shadow="always">
           <div class="el-card__body mid">
@@ -49,30 +34,21 @@
         </el-card>
       </el-col>
       <el-col :span="3" class="articles-area">
-        <el-card style="text-align: left">
-          <div v-for="article in articles" :key="article.id">
-            <div style="float:left;width:85%;height: 150px;">
-              <router-link class="article-link" :to="{path:'jotter/article',query:{id: article.id}}">
-                <span style="font-size: 20px">
+        <el-card v-for="article in articles" :key="article.id" style="width:85%;height: 250px;">
+          <router-link class="article-link" :to="{path:'jotter/article',query:{id: article.id}}">
+                <span style="font-size: 25px;text-align: center">
                   <strong>{{article.title}}</strong>
                 </span>
-              </router-link>
-              <el-divider content-position="left">
-                <i class="el-icon-edit"></i>
-                <span> {{article.publishDate}}</span>
-                <el-divider direction="vertical"></el-divider>
-                <i class="el-icon-folder"></i>
-                <span> {{article.type}}</span>
-              </el-divider>
-              <router-link class="article-link" :to="{path:'jotter/article',query:{id: article.id}}">
-                <p>{{article.introduction}}</p>
-              </router-link>
-            </div>
-            <el-image
-              style="margin:18px 0 0 30px;width:100px;height: 100px"
-              :src="article.cover"
-              fit="cover"></el-image>
-            <el-divider></el-divider>
+          </router-link>
+          <el-divider content-position="center">
+            <i class="el-icon-edit"></i>
+            <span> {{article.publishDate}}</span>
+            <el-divider direction="vertical"></el-divider>
+            <i class="el-icon-folder"></i>
+            <span> {{article.type}}</span>
+          </el-divider>
+          <div class="markdown-body" style="text-align: left">
+            <div v-html="article.introduction"></div>
           </div>
         </el-card>
         <br>
@@ -90,11 +66,12 @@
 </template>
 
 <script>
+  import ArticleStatistics from './ArticleStatistics'
   export default {
     name: 'Articles',
+    components: {ArticleStatistics},
     data() {
       return {
-        circleUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
         articleStatistic: {},
         articles: [],
         pageSize: 2,
@@ -103,36 +80,12 @@
       }
     },
     mounted() {
-      this.currentUser();
-      this.countArticles();
-      this.loadArticles();
+      this.$refs.statistics.;
+      this.articleStatistic = this.$refs.statistics.articleStatistic;
+      this.articles = this.$refs.statistics.articles;
+      this.total = this.$refs.statistics.total;
     },
     methods: {
-      currentUser() {
-        var _this = this;
-        this.$axios.get('/login/currentUser').then(resp => {
-          if (resp && resp.data.status === 0) {
-            _this.circleUrl = resp.data.data.icon;
-          }
-        })
-      },
-      countArticles() {
-        var _this = this;
-        this.$axios.get('/article/statistics').then(resp => {
-          if (resp && resp.data.status === 0) {
-            _this.articleStatistic = resp.data.data;
-            this.total = _this.articleStatistic.articleNum;
-          }
-        })
-      },
-      loadArticles() {
-        var _this = this;
-        this.$axios.get('/article/listArticles/1/' + this.pageSize).then(resp => {
-          if (resp && resp.data.status === 0) {
-            _this.articles = resp.data.data
-          }
-        })
-      },
       handleCurrentChange(page) {
         var _this = this;
         this.$axios.get('/article/listArticles/' + page + '/' + this.pageSize).then(resp => {
@@ -164,27 +117,7 @@
 </script>
 
 <style>
-  .text {
-    font-size: 14px;
-    margin-bottom: 10px;
-  }
-
-  .clearfix:before,
-  .clearfix:after {
-    display: table;
-    content: "";
-  }
-
-  .clearfix:after {
-    clear: both
-  }
-
-  .el-card__header {
-    background-color: #1F1F1F;
-    font-size: 28px;
-    color: #eaeaea;
-  }
-
+  @import "../../../styles/markdown.css";
   .articles-title {
     width: 200px;
   }

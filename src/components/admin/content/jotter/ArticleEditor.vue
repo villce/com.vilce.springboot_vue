@@ -3,7 +3,7 @@
     <el-row style="margin: 18px 0px 0px 18px ">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/admin/dashboard'}">管理中心</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/admin/content/book'}">内容管理</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/admin/content/article'}">内容管理</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/admin/content/article'}">文章管理</el-breadcrumb-item>
         <el-breadcrumb-item>编辑器</el-breadcrumb-item>
       </el-breadcrumb>
@@ -21,7 +21,7 @@
         ref=md
         @save="saveArticles"
         fontSize="16px">
-        <button type="button" class="op-icon el-icon-document" :title="'摘要/封面'" slot="left-toolbar-after"
+        <button type="button" class="op-icon el-icon-document" :title="'标签/分类'" slot="left-toolbar-after"
                 @click="dialogVisible = true"></button>
       </mavon-editor>
       <el-dialog
@@ -29,6 +29,7 @@
         width="30%">
         <el-divider content-position="left">文章标签</el-divider>
         <el-tag
+          v-model="article.label"
           :key="tag"
           v-for="tag in dynamicTags"
           closable
@@ -56,18 +57,6 @@
             :value="item.value">
           </el-option>
         </el-select>
-        <el-divider content-position="left">摘要</el-divider>
-        <el-input
-          type="textarea"
-          v-model="article.introduction"
-          rows="6"
-          maxlength="255"
-          show-word-limit></el-input>
-        <el-divider content-position="left">封面</el-divider>
-        <div style="margin-top: 20px">
-          <el-input v-model="article.cover" placeholder="图片 URL"></el-input>
-          <img-upload @onUpload="uploadImg" ref="imgUpload" style="margin-top: 5px"></img-upload>
-        </div>
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
           <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
@@ -78,99 +67,91 @@
 </template>
 
 <script>
-import ImgUpload from '../ImgUpload'
-
-export default {
-  name: 'ArticleEditor',
-  components: {ImgUpload},
-  data () {
-    return {
-      dynamicTags: [],
-      inputVisible: false,
-      inputValue: '',
-      article: {},
-      dialogVisible: false,
-      options: [{
-        value: '笔记',
-        label: '笔记'
-      }, {
-        value: '文章',
-        label: '文章'
-      }],
-      value: ''
-    }
-  },
-  mounted () {
-    if (this.$route.params.article) {
-      this.article = this.$route.params.article;
-      this.dynamicTags = this.article.label;
-    }
-  },
-  methods: {
-    handleClose(tag) {
-      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
-    },
-    showInput() {
-      this.inputVisible = true;
-      this.$nextTick(_this => {
-        this.$refs.saveTagInput.$refs.input.focus();
-      });
-    },
-    handleInputConfirm() {
-      let inputValue = this.inputValue;
-      if (inputValue) {
-        this.dynamicTags.push(inputValue);
+  export default {
+    name: 'ArticleEditor',
+    data() {
+      return {
+        dynamicTags: [],
+        inputVisible: false,
+        inputValue: '',
+        article: {},
+        dialogVisible: false,
+        options: [{
+          value: '笔记',
+          label: '笔记'
+        }, {
+          value: '文章',
+          label: '文章'
+        }],
+        value: ''
       }
-      this.inputVisible = false;
-      this.inputValue = '';
     },
-    saveArticles (value, render) {
-      // value 是 md，render 是 html
-      this.$confirm('是否保存并发布文章?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-          this.$axios
-            .post('/article/saveArticle', {
+    mounted() {
+      if (this.$route.params.article) {
+        this.article = this.$route.params.article;
+        this.dynamicTags = this.article.label;
+      }
+    },
+    methods: {
+      handleClose(tag) {
+        this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+      },
+      showInput() {
+        this.inputVisible = true;
+        this.$nextTick(_this => {
+          this.$refs.saveTagInput.$refs.input.focus();
+        });
+      },
+      handleInputConfirm() {
+        let inputValue = this.inputValue;
+        if (inputValue) {
+          this.dynamicTags.push(inputValue);
+        }
+        this.inputVisible = false;
+        this.inputValue = '';
+      },
+      saveArticles(value, render) {
+        // value 是 md，render 是 html
+        this.$confirm('是否保存并发布文章?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          console.info(this.dynamicTags);
+          console.info(this.article);
+          this.$axios.post('/article/saveArticle', {
               id: this.article.id,
-              article_type: this.article_type.value,
+              article_type: this.article.type,
               article_label: this.dynamicTags,
               article_title: this.article.title,
-              article_content_md: value,
+              article_content_md: this.article.contentMd,
               article_content_html: render,
-              article_abstract: this.article.introduction,
-              article_cover: this.article.cover,
               article_date: new Date()
             }).then(resp => {
-            if (resp && resp.data.status === 0) {
-              this.$message({
-                type: 'info',
-                message: resp.data.message
-              })
-            }
+              if (resp && resp.data.status === 0) {
+                this.$message({
+                  type: 'info',
+                  message: resp.data.message
+                })
+              }
+            })
+          }
+        ).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消发布'
           })
-        }
-      ).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消发布'
         })
-      })
-    },
-    uploadImg () {
-      var _this = this;
-      _this.article.cover = this.$refs.imgUpload.url;
-      console.info(_this.article.cover);
+      }
     }
   }
-}
 </script>
 
 <style>
   .el-tag + .el-tag {
     margin-left: 10px;
   }
+
   .button-new-tag {
     margin-left: 10px;
     height: 32px;
@@ -178,6 +159,7 @@ export default {
     padding-top: 0;
     padding-bottom: 0;
   }
+
   .input-new-tag {
     width: 90px;
     margin-left: 10px;
