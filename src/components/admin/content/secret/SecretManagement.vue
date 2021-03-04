@@ -7,14 +7,9 @@
         <el-breadcrumb-item>秘密花园管理</el-breadcrumb-item>
       </el-breadcrumb>
     </el-row>
-    <el-link
-      href="/admin/content/SecretModulesEditor"
-      :underline="false"
-      target="_blank"
-      style="margin: 18px 2%"
-      class="add-link">
-      <el-button type="success">添加模块</el-button>
-    </el-link>
+    <el-row style="margin: 18px 2%;font-size: 18px;text-align: left">
+      <el-button type="success" @click="addModules">添加模块</el-button>
+    </el-row>
     <el-card style="margin: 18px 2%;width: 95%">
       <el-table
         :data="modules"
@@ -89,7 +84,7 @@
         return {
           modulesStatistic: [],
           modules: [],
-          pageSize: 2,
+          pageSize: 4,
           total: 1,
           currentPage: 1
         }
@@ -116,19 +111,31 @@
           var _this = this;
           this.$axios.get('/secret/getModules/' + page + '/' + this.pageSize).then(resp => {
             if (resp && resp.data.status === 0) {
-              _this.modules = resp.data.data
+              _this.modules = resp.data.data.modulesList;
+              _this.total = resp.data.data.num;
             }
           })
         },
-        editModules (modules) {
+        addModules() {
           this.$router.push(
             {
-              name: 'SecretModulesEditor',
-              params: {
-                modules: modules
-              }
+              name: 'SecretModulesEditor'
             }
           )
+        },
+        editModules (id) {
+          this.$axios.get('/secret/findModules/' + id).then(resp => {
+            if (resp && resp.data.status === 0) {
+              this.$router.push(
+                {
+                  name: 'SecretModulesEditor',
+                  params: {
+                    modules: resp.data.data
+                  }
+                }
+              )
+            }
+          })
         },
         deleteModules (id) {
           this.$confirm('此操作将永久删除该模块, 是否继续?', '提示', {

@@ -62,6 +62,7 @@ import {
   MessageBox,
   Message,
   Notification, Dropdown, DropdownMenu, ColorPicker, Cascader, Slider, Avatar,
+  DatePicker,
 } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
@@ -124,6 +125,7 @@ Vue.use(Option)
 Vue.use(Slider)
 Vue.use(Avatar)
 Vue.use(Loading.directive)
+Vue.use(DatePicker)
 
 Vue.prototype.$loading = Loading.service
 Vue.prototype.$msgbox = MessageBox
