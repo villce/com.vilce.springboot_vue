@@ -7,7 +7,12 @@
         <el-breadcrumb-item>文章管理</el-breadcrumb-item>
       </el-breadcrumb>
     </el-row>
-    <el-link href="/admin/content/articleEditor" :underline="false" target="_blank" class="add-link">
+    <el-link
+      href="/admin/content/articleEditor"
+      :underline="false"
+      target="_blank"
+      style="margin: 18px 2%"
+      class="add-link">
       <el-button type="success">写文章</el-button>
     </el-link>
     <el-card style="margin: 18px 2%;width: 95%">
@@ -122,7 +127,7 @@ export default {
     viewArticle (id) {
       let articleUrl = this.$router.resolve(
         {
-          path: '../../jotter/article',
+          path: '../../home/jotter/article',
           query: {
             id: id
           }

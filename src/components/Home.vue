@@ -1,6 +1,6 @@
 <template>
   <body id="home">
-    <div style="height:100%;width:100%" class="home">
+  <div style="height:100%;width:100%" class="home">
     <el-row type="flex" justify="center">
       <el-col :span="15" class="user">
         <div class="block">
@@ -27,10 +27,10 @@
         </el-card>
       </el-col>
       <el-col :span="4" class="center-card">
-        <el-card shadow="always">
+        <el-card shadow="always" @click.native="handleSecret">
           <img src="../assets/img/hzw/name/5.jpg" class="image">
           <div style="padding: 10px;">
-            <span>待定</span>
+            <span>秘密花园</span>
           </div>
         </el-card>
       </el-col>
@@ -68,6 +68,9 @@
       },
       handleAdmin() {
         this.$router.replace({path: '/admin'});
+      },
+      handleSecret() {
+        this.$router.replace({path: '/secret'});
       }
     }
   }
@@ -82,9 +85,11 @@
     height: 100%;
     background-size: cover;
   }
-  body{
+
+  body {
     margin: 0;
   }
+
   .image {
     width: 100%;
     display: block;

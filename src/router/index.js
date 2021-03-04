@@ -30,6 +30,11 @@ export default new Router({
       component: () => import('../components/home/tool/MarkTool')
     },
     {
+      path: '/secret',
+      name: 'Secret',
+      component: () => import('../components/home/secret/Secret')
+    },
+    {
       path: '/jotter',
       name: 'Jotter',
       component: () => import('../components/home/jotter/Articles')
@@ -38,14 +43,6 @@ export default new Router({
       path: '/jotter/article',
       name: 'Article',
       component: () => import('../components/home/jotter/ArticleDetails')
-    },
-    {
-      path: '/admin/content/articleEditor',
-      name: 'ArticleEditor',
-      component: () => import('../components/admin/content/jotter/ArticleEditor'),
-      meta: {
-        requireAuth: true
-      }
     },
     {
       path: '/login',
@@ -72,7 +69,23 @@ export default new Router({
           meta: {
             requireAuth: true
           }
-        }
+        },
+        {
+          path: '/admin/content/articleEditor',
+          name: 'ArticleEditor',
+          component: () => import('../components/admin/content/jotter/ArticleEditor'),
+          meta: {
+            requireAuth: true
+          }
+        },
+        {
+          path: '/admin/content/secretModulesEditor',
+          name: 'SecretModulesEditor',
+          component: () => import('../components/admin/content/secret/SecretModulesEditor'),
+          meta: {
+            requireAuth: true
+          }
+        },
       ]
     },
     {

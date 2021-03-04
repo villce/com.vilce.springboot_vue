@@ -80,7 +80,7 @@
       }
     },
     mounted() {
-      this.$refs.statistics.;
+      this.$refs.statistics;
       this.articleStatistic = this.$refs.statistics.articleStatistic;
       this.articles = this.$refs.statistics.articles;
       this.total = this.$refs.statistics.total;

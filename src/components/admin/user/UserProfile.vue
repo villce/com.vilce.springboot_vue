@@ -5,7 +5,7 @@
       :visible.sync="dialogFormVisible">
       <el-form v-model="selectedUser" style="text-align: left" ref="dataForm">
         <el-form-item label="用户名" label-width="120px" prop="username">
-          <label>{{selectedUser.username}}</label>
+          <el-input v-model="selectedUser.username" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="密码" label-width="120px" prop="password">
           <el-button type="warning" @click="resetPassword(selectedUser.username)">重置密码</el-button>
@@ -84,7 +84,7 @@
           width="120">
           <template slot-scope="scope">
             <el-button
-              @click="editUser(scope.row)"
+              @click="editUser(scope.row.id)"
               type="text"
               size="small">
               编辑
@@ -177,11 +177,11 @@
             }
           }
         }
+        // 根据视图绑定的角色 id 向后端传送角色信息
         this.$axios.put('/user/editUser', {
+          id: user.id,
           username: user.username,
-          name: user.name,
-          phone: user.phone,
-          email: user.email,
+          icon: user.icon,
           roles: roles
         }).then(resp => {
           if (resp && resp.data.status === 0) {
@@ -194,14 +194,18 @@
           }
         })
       },
-      editUser(user) {
-        this.dialogFormVisible = true
-        this.selectedUser = user
-        let roleIds = []
-        for (let i = 0; i < user.roles.length; i++) {
-          roleIds.push(user.roles[i].id)
-        }
-        this.selectedRolesIds = roleIds
+      editUser(userId) {
+        this.$axios.get('/user/findUser/' + userId).then(resp => {
+          if (resp && resp.data.status === 0) {
+            this.dialogFormVisible = true
+            this.selectedUser = resp.data.data
+            let roleIds = []
+            for (let i = 0; i < this.selectedUser.roles.length; i++) {
+              roleIds.push(this.selectedUser.roles[i].id)
+            }
+            this.selectedRolesIds = roleIds
+          }
+        })
       },
       resetPassword(username) {
         this.$axios.put('/user/resetPassword', {
