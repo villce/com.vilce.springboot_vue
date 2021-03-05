@@ -1,25 +1,71 @@
 <template>
-  <div class="block">
-    <el-timeline>
-      <el-timeline-item timestamp="2018/4/12" placement="top">
-        <el-card>
-          <h4>更新 Github 模板</h4>
-          <p>王小虎 提交于 2018/4/12 20:46</p>
-        </el-card>
-      </el-timeline-item>
-      <el-timeline-item timestamp="2018/4/3" placement="top">
-        <el-card>
-          <h4>更新 Github 模板</h4>
-          <p>王小虎 提交于 2018/4/3 20:46</p>
-        </el-card>
-      </el-timeline-item>
-      <el-timeline-item timestamp="2018/4/2" placement="top">
-        <el-card>
-          <h4>更新 Github 模板</h4>
-          <p>王小虎 提交于 2018/4/2 20:46</p>
-        </el-card>
-      </el-timeline-item>
-    </el-timeline>
+  <!--时间线-->
+  <div class="timeLine">
+    <el-container>
+      <el-container>
+        <el-header style="margin-top: 20px">
+          <i
+            style="color: #000000; fontSize: 18px">
+            {{modulesList[timeIndex].modulesTitle}}
+          </i>
+        </el-header>
+        <el-main style="margin-top: -30px">
+          <div class="content">
+            <el-carousel :interval="5000" arrow="always" :height="'540px'">
+              <el-carousel-item v-for="url in modulesList[timeIndex].imgUrlList" :key="url">
+                <el-row :gutter="12">
+                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" style="height:540px;margin-bottom: 20px;">
+                    <el-image
+                      :src="url"
+                      alt=""
+                      :fit="'contain'"
+                      style="zoom: 50%"></el-image>
+                  </el-col>
+                </el-row>
+              </el-carousel-item>
+            </el-carousel>
+          </div>
+        </el-main>
+        <el-footer style="margin-top: 50px">
+          <el-card style="height: 130px">
+            <div class="my_timeline_prev">
+              <img
+                style="zoom: 20%;margin-top: 150px;"
+                src="../../../assets/img/icon/left2.png"
+                @click="moveLeft"
+                class="my_timeline_node"/>
+            </div>
+            <div class="my_timeline_next">
+              <img
+                style="zoom: 20%;margin-top: 150px;"
+                src="../../../assets/img/icon/right2.png"
+                @click="moveRight"
+                class="my_timeline_node"/>
+            </div>
+            <div class="ul_box">
+              <ul class="my_timeline" ref="mytimeline" style="margin-left: 100px;">
+                <li class="my_timeline_item" v-for="(item,index) in modulesList" :key="index">
+                  <!--圈圈节点-->
+                  <div class="my_timeline_node"
+                       :style=" {backgroundColor: '#e4e7ed', width: '28px', height: '28px'}"
+                       @click="changeActive(index)"
+                       :class="{active: index == timeIndex}"></div>
+                  <!--线-->
+                  <div
+                    :style="{width: index === 4 ? '0%':'100%'}"
+                    class="my_timeline_item_line">
+                  </div>
+                  <!--标注-->
+                  <div class="my_timeline_item_content" :style="{color: '#999', fontSize: '18px'}">
+                    {{item.modulesDate}}
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </el-card>
+        </el-footer>
+      </el-container>
+    </el-container>
   </div>
 </template>
 
@@ -28,11 +74,102 @@
     name: "Secret",
     data() {
       return {
+        timeIndex: 0,
+        modulesList: [],
+        modules: {},
+        modulesIndex: 0,
+        pageSize: 5
       }
     },
+    mounted() {
+      this.loadModules();
+    },
+    methods: {
+      changeActive(index) {
+        this.timeIndex = index;
+      },
+      moveLeft() {
+        // 向左移动4个单位获取模块信息
+        var pageIndex = this.modulesIndex + 1;
+        this.$axios.get("/secret/timeLineGetModules/" + pageIndex + "/" + this.pageSize).then(resp => {
+          if (resp && resp.data.status === 0) {
+            this.modulesList = resp.data.data.modulesList;
+            this.modulesIndex = pageIndex;
+          }
+        })
+      },
+      moveRight() {
+        // 向左移动4个单位获取模块信息
+        var pageIndex = this.modulesIndex - 1;
+        this.$axios.get("/secret/timeLineGetModules/" + pageIndex + "/" + this.pageSize).then(resp => {
+          if (resp && resp.data.status === 0) {
+            this.modulesList = resp.data.data.modulesList;
+            this.modulesIndex = pageIndex;
+          }
+        })
+      },
+      loadModules() {
+        this.$axios.get("/secret/getNewModules/" + this.pageSize).then(resp => {
+          if (resp && resp.data.status === 0) {
+            this.modulesList = resp.data.data.modulesList;
+            this.modulesIndex = 1;
+          }
+        })
+      },
+    }
   }
 </script>
 
 <style scoped>
+  .my_timeline_prev, .my_timeline_next {
+    float: left;
+    display: inline-block;
+    background-color: #fff;
+    cursor: pointer;
+  }
 
+  .my_timeline_prev {
+    width: 200px;
+    float: left;
+  }
+
+  .my_timeline_next {
+    float: right;
+    width: 200px;
+  }
+
+  .ul_box {
+    height: 60px;
+    float: left;
+    margin-top: -80px;
+    margin-left: 130px;
+  }
+
+  .my_timeline_item {
+    display: inline-block;
+    width: 220px;
+  }
+
+  .my_timeline_node {
+    box-sizing: border-box;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .my_timeline_node.active {
+    background-color: #fff !important;
+    border: 6px solid #f68720;
+  }
+
+  .my_timeline_item_line {
+    width: 100%;
+    height: 10px;
+    margin: -14px 0 0 28px;
+    border-top: 2px solid #E4E7ED;
+    /*border-left: none;*/
+  }
+
+  .my_timeline_item_content {
+    margin: 10px 0 0 -200px;
+  }
 </style>

@@ -57,7 +57,7 @@
         modules: {},
         imgUrlList: [],
         imageList: [],
-        url: '',
+        deleteUrl: '',
         dialogImageUrl: '',
         dialogVisible: false,
         disabled: false
@@ -77,26 +77,27 @@
       }
     },
     methods: {
-      handleRemove() {
-        this.$axios.get('/image/deleteImage?imageUrl=' + this.url).then(resp => {
+      handleRemove(file) {
+        this.deleteUrl = file.url;
+        this.$axios.get('/image/deleteImage?imageUrl=' + this.deleteUrl).then(resp => {
           if (resp && resp.data.status === 0) {
             var result = resp.data.data;
             if (result) {
-              var url = this.url;
-              this.imgUrlList = this.imgUrlList.filter(function(item) {
-                return item != url;
-              });
+              console.info(this.imgUrlList);
               this.$message.warning('移除成功');
             }
           }
+        });
+        var url = this.deleteUrl;
+        this.imgUrlList = this.imgUrlList.filter(function(item) {
+          return item != url;
         });
       },
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file.url;
       },
       handlerSuccess(response) {
-        this.url = response.data;
-        this.imgUrlList.push(this.url);
+        this.imgUrlList.push(response.data);
       },
       saveModules(modules) {
         this.$axios.post("/secret/editModules", {
