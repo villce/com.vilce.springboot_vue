@@ -2,69 +2,70 @@
   <!--时间线-->
   <div class="timeLine">
     <el-container>
-      <el-container>
-        <el-header style="margin-top: 20px">
-          <i
-            style="color: #000000; fontSize: 18px">
-            {{modulesList[timeIndex].modulesTitle}}
-          </i>
-        </el-header>
-        <el-main style="margin-top: -30px">
-          <div class="content">
-            <el-carousel :interval="5000" arrow="always" :height="'540px'">
-              <el-carousel-item v-for="url in modulesList[timeIndex].imgUrlList" :key="url">
-                <el-row :gutter="12">
-                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" style="height:540px;margin-bottom: 20px;">
-                    <el-image
-                      :src="url"
-                      alt=""
-                      :fit="'contain'"
-                      style="zoom: 50%"></el-image>
-                  </el-col>
-                </el-row>
-              </el-carousel-item>
-            </el-carousel>
+      <el-header style="height: 60px;margin-top: 20px">
+        <a href="/index">
+          <el-avatar :size="70" :src="userIcon" width="55px" style="float: left;margin-top: -20px;"></el-avatar>
+        </a>
+        <i
+          style="color: #000000; fontSize: 18px">
+          {{modulesList[timeIndex].modulesTitle}}
+        </i>
+      </el-header>
+      <el-main style="margin-top: -30px">
+        <div class="content">
+          <el-carousel :interval="5000" arrow="always" :height="'540px'">
+            <el-carousel-item v-for="url in modulesList[timeIndex].imgUrlList" :key="url">
+              <el-row :gutter="12">
+                <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" style="height:540px;margin-bottom: 20px;">
+                  <el-image
+                    :src="url"
+                    alt=""
+                    :fit="'contain'"
+                    style="height:540px;"></el-image>
+                </el-col>
+              </el-row>
+            </el-carousel-item>
+          </el-carousel>
+        </div>
+      </el-main>
+      <el-footer style="margin-top: 50px">
+        <el-card style="height: 130px">
+          <div class="my_timeline_prev">
+            <img
+              style="zoom: 20%;margin-top: 150px;"
+              src="../../../assets/img/icon/left2.png"
+              @click="moveLeft"
+              class="my_timeline_node"/>
           </div>
-        </el-main>
-        <el-footer style="margin-top: 50px">
-          <el-card style="height: 130px">
-            <div class="my_timeline_prev">
-              <img
-                style="zoom: 20%;margin-top: 150px;"
-                src="../../../assets/img/icon/left2.png"
-                @click="moveLeft"
-                class="my_timeline_node"/>
-            </div>
-            <div class="my_timeline_next">
-              <img
-                style="zoom: 20%;margin-top: 150px;"
-                src="../../../assets/img/icon/right2.png"
-                @click="moveRight"
-                class="my_timeline_node"/>
-            </div>
-            <div class="ul_box">
-              <ul class="my_timeline" ref="mytimeline" style="margin-left: 100px;">
-                <li class="my_timeline_item" v-for="(item,index) in modulesList" :key="index">
-                  <!--圈圈节点-->
-                  <div class="my_timeline_node"
-                       :style=" {backgroundColor: '#e4e7ed', width: '28px', height: '28px'}"
-                       @click="changeActive(index)"
-                       :class="{active: index == timeIndex}"></div>
-                  <!--线-->
-                  <div
-                    :style="{width: index === 4 ? '0%':'100%'}"
-                    class="my_timeline_item_line">
-                  </div>
-                  <!--标注-->
-                  <div class="my_timeline_item_content" :style="{color: '#999', fontSize: '18px'}">
-                    {{item.modulesDate}}
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </el-card>
-        </el-footer>
-      </el-container>
+          <div class="my_timeline_next">
+            <img
+              style="zoom: 20%;margin-top: 150px;"
+              src="../../../assets/img/icon/right2.png"
+              @click="moveRight"
+              class="my_timeline_node"/>
+          </div>
+          <div class="ul_box">
+            <ul class="my_timeline" ref="mytimeline" style="margin-left: 100px;">
+              <li class="my_timeline_item" v-for="(item,index) in modulesList" :key="index">
+                <!--圈圈节点-->
+                <div class="my_timeline_node"
+                     :style=" {backgroundColor: '#e4e7ed', width: '28px', height: '28px'}"
+                     @click="changeActive(index)"
+                     :class="{active: index == timeIndex}"></div>
+                <!--线-->
+                <div
+                  :style="{width: index === 4 ? '0%':'100%'}"
+                  class="my_timeline_item_line">
+                </div>
+                <!--标注-->
+                <div class="my_timeline_item_content" :style="{color: '#999', fontSize: '18px'}">
+                  {{item.modulesDate}}
+                </div>
+              </li>
+            </ul>
+          </div>
+        </el-card>
+      </el-footer>
     </el-container>
   </div>
 </template>
@@ -74,44 +75,61 @@
     name: "Secret",
     data() {
       return {
+        userIcon: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
         timeIndex: 0,
         modulesList: [],
         modules: {},
-        modulesIndex: 0,
-        pageSize: 5
+        modulesIndex: 1,
+        pageSize: 5,
+        num: 0
       }
     },
     mounted() {
+      this.currentUser();
       this.loadModules();
     },
     methods: {
+      currentUser() {
+        var _this = this;
+        this.$axios.get('/login/currentUser').then(resp => {
+          if (resp && resp.data.status === 0) {
+            _this.userIcon = resp.data.data.icon;
+            _this.username = resp.data.data.username;
+          }
+        })
+      },
       changeActive(index) {
         this.timeIndex = index;
       },
       moveLeft() {
         // 向左移动4个单位获取模块信息
-        var pageIndex = this.modulesIndex + 1;
-        this.$axios.get("/secret/timeLineGetModules/" + pageIndex + "/" + this.pageSize).then(resp => {
-          if (resp && resp.data.status === 0) {
-            this.modulesList = resp.data.data.modulesList;
-            this.modulesIndex = pageIndex;
-          }
-        })
+        if (this.modulesIndex * this.pageSize < this.num) {
+          var pageIndex = this.modulesIndex + 1;
+          this.$axios.get("/secret/timeLineGetModules/" + pageIndex + "/" + this.pageSize).then(resp => {
+            if (resp && resp.data.status === 0) {
+              this.modulesList = resp.data.data.modulesList;
+              this.modulesIndex = pageIndex;
+            }
+          })
+        }
       },
       moveRight() {
         // 向左移动4个单位获取模块信息
-        var pageIndex = this.modulesIndex - 1;
-        this.$axios.get("/secret/timeLineGetModules/" + pageIndex + "/" + this.pageSize).then(resp => {
-          if (resp && resp.data.status === 0) {
-            this.modulesList = resp.data.data.modulesList;
-            this.modulesIndex = pageIndex;
-          }
-        })
+        if (this.modulesIndex > 1) {
+          var pageIndex = this.modulesIndex - 1;
+          this.$axios.get("/secret/timeLineGetModules/" + pageIndex + "/" + this.pageSize).then(resp => {
+            if (resp && resp.data.status === 0) {
+              this.modulesList = resp.data.data.modulesList;
+              this.modulesIndex = pageIndex;
+            }
+          })
+        }
       },
       loadModules() {
         this.$axios.get("/secret/getNewModules/" + this.pageSize).then(resp => {
           if (resp && resp.data.status === 0) {
             this.modulesList = resp.data.data.modulesList;
+            this.num = resp.data.data.num;
             this.modulesIndex = 1;
           }
         })
@@ -171,5 +189,21 @@
 
   .my_timeline_item_content {
     margin: 10px 0 0 -200px;
+  }
+
+  .el-carousel__item h3 {
+    color: #475669;
+    font-size: 14px;
+    opacity: 0.75;
+    line-height: 150px;
+    margin: 0;
+  }
+
+  .el-carousel__item:nth-child(2n) {
+    background-color: #99a9bf;
+  }
+
+  .el-carousel__item:nth-child(2n+1) {
+    background-color: #d3dce6;
   }
 </style>

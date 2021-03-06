@@ -12,7 +12,7 @@
     <el-row :gutter="10" type="flex" justify="center">
       <el-col :span="4" class="center-card">
         <el-card shadow="always" @click.native="handleJotter">
-          <img src="../assets/img/hzw/name/3.jpg" class="image">
+          <img src="../assets/img/hzw/name/2.jpg" class="image">
           <div style="padding: 10px;">
             <span>博客</span>
           </div>

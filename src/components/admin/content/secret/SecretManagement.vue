@@ -36,7 +36,7 @@
           fit>
           <template slot-scope="props">
             <el-image
-              style="width:100px;height: 100px"
+              style="width:100px;height: 70px"
               :src="props.row.imgUrlList[0]"
               fit="url">
             </el-image>
