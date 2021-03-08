@@ -20,7 +20,7 @@
           v-model="modules.modulesDate"
           style="margin: 10px 0px;font-size: 18px;"
           type="datetime"
-          format="yyyy-MM-dd HH:mm:ss"
+          value-format="yyyy-MM-dd HH:mm:ss"
           placeholder="选择日期时间">
         </el-date-picker>
       </el-row>
@@ -29,7 +29,7 @@
           id="selectfiles"
           :file-list="imageList"
           list-type="picture-card"
-          action="http://localhost:8006/api/image/coversUpload"
+          action="http://localhost:8006/api/secret/coversUpload"
           :on-preview="handlePictureCardPreview"
           :on-remove="handleRemove"
           :on-success="handlerSuccess"
@@ -67,7 +67,7 @@
       if (this.$route.params.modules) {
         this.modules = this.$route.params.modules;
         this.imgUrlList = this.modules.imgUrlList;
-        for (var i=0; i<this.modules.imgUrlList.length;i++) {
+        for (var i = 0; i < this.modules.imgUrlList.length; i++) {
           var image = {
             'name': i,
             'url': this.modules.imgUrlList[i]
@@ -78,20 +78,11 @@
     },
     methods: {
       handleRemove(file) {
-        this.deleteUrl = file.url;
-        this.$axios.get('/image/deleteImage?imageUrl=' + this.deleteUrl).then(resp => {
-          if (resp && resp.data.status === 0) {
-            var result = resp.data.data;
-            if (result) {
-              console.info(this.imgUrlList);
-              this.$message.warning('移除成功');
-            }
-          }
-        });
-        var url = this.deleteUrl;
-        this.imgUrlList = this.imgUrlList.filter(function(item) {
+        var url = file.url;
+        this.imgUrlList = this.imgUrlList.filter(function (item) {
           return item != url;
         });
+        this.$message.warning('移除成功');
       },
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file.url;

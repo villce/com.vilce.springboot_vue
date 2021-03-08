@@ -2,21 +2,43 @@
   <!--时间线-->
   <div class="timeLine">
     <el-container>
-      <el-header style="height: 60px;margin-top: 20px">
-        <a href="/index">
-          <el-avatar :size="70" :src="userIcon" width="55px" style="float: left;margin-top: -20px;"></el-avatar>
-        </a>
-        <i
-          style="color: #000000; fontSize: 18px">
-          {{modulesList[timeIndex].modulesTitle}}
-        </i>
+      <el-header
+        style="height: 80px;">
+        <el-row :gutter="20">
+          <el-col :span="4">
+            <a href="/index">
+              <el-avatar :size="70" :src="userIcon" width="55px" style="float: left;margin-top: 15px"></el-avatar>
+            </a>
+          </el-col>
+          <el-col :span="16">
+            <div style="font-size: 30px;margin-top: 25px;">
+              {{modulesList[timeIndex].modulesTitle}}
+            </div>
+          </el-col>
+          <el-col :span="4">
+            <el-row>
+              <el-col :span="6" style="font-size: 18px;margin-top: 20px">
+                <span>LCZ</span>
+              </el-col>
+              <el-col :span="6">
+                <Heart style="zoom: 20%"></Heart>
+              </el-col>
+              <el-col :span="6" style="font-size: 18px;margin-top: 20px">
+                <span>CSM</span>
+              </el-col>
+            </el-row>
+            <el-row style="float: left;font-size: 20px;margin-top: -5px;margin-left: 65px">
+              <span>{{days}}天</span>
+            </el-row>
+          </el-col>
+        </el-row>
       </el-header>
-      <el-main style="margin-top: -30px">
+      <el-main style="">
         <div class="content">
           <el-carousel :interval="5000" arrow="always" :height="'540px'">
             <el-carousel-item v-for="url in modulesList[timeIndex].imgUrlList" :key="url">
               <el-row :gutter="12">
-                <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" style="height:540px;margin-bottom: 20px;">
+                <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" style="height:540px;">
                   <el-image
                     :src="url"
                     alt=""
@@ -71,8 +93,11 @@
 </template>
 
 <script>
+  import Heart from "./Heart";
+
   export default {
     name: "Secret",
+    components: {Heart},
     data() {
       return {
         userIcon: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
@@ -81,11 +106,13 @@
         modules: {},
         modulesIndex: 1,
         pageSize: 5,
-        num: 0
+        num: 0,
+        days: 0
       }
     },
     mounted() {
       this.currentUser();
+      this.dateDiffer();
       this.loadModules();
     },
     methods: {
@@ -130,10 +157,22 @@
           if (resp && resp.data.status === 0) {
             this.modulesList = resp.data.data.modulesList;
             this.num = resp.data.data.num;
-            this.modulesIndex = 1;
+            this.modulesIndex = 5;
           }
         })
       },
+      dateDiffer() {
+        var date_start = "2019-03-01"
+        //date1结束时间
+        let date1 = new Date(date_start);
+        //date2当前时间
+        let date2 = new Date();
+        date1 = new Date(date1.getFullYear(), date1.getMonth(), date1.getDate());
+        date2 = new Date(date2.getFullYear(), date2.getMonth(), date2.getDate());
+        const diff = date2.getTime() - date1.getTime(); //目标时间减去当前时间
+        const diffDate = diff / (24 * 60 * 60 * 1000);  //计算当前时间与结束时间之间相差天数
+        this.days = diffDate;
+      }
     }
   }
 </script>
