@@ -76,7 +76,7 @@
   }
 </script>
 
-<style>
+<style scoped>
   #home {
     background: url("../assets/img/hzw/noFace/1.jpg") no-repeat;
     background-position: center;
